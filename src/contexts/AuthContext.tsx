@@ -61,8 +61,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     try {
-      console.log('aaa')
-
       const result = await client.post(`/sessions/`, { email, password })
       const token = result.data.access
 

@@ -33,20 +33,17 @@ export function Login() {
     const emailValidation = emailSchema.safeParse(email)
     const passwordValidation = passwordSchema.safeParse(password)
 
-    // if (!emailValidation.success) {
-    //   setEmailError(emailValidation.error.errors[0].message);
-    // } else {
-    //   setEmailError('');
-    // }
+    if (!emailValidation.success) {
+      setEmailError(emailValidation.error.errors[0].message)
+    } else {
+      setEmailError('')
+    }
 
-    // if (!passwordValidation.success) {
-    //   setPasswordError(passwordValidation.error.errors[0].message);
-    // } else {
-    //   setPasswordError('');
-    // }
-
-    console.log(email)
-    console.log(password)
+    if (!passwordValidation.success) {
+      setPasswordError(passwordValidation.error.errors[0].message)
+    } else {
+      setPasswordError('')
+    }
 
     onLogin!(email, password)
   }
