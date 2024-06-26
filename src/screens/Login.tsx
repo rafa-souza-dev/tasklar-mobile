@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
-import { z } from 'zod';
+import React, { useState } from 'react'
+import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
+import { z } from 'zod'
 
-import { useAuth } from '../contexts/AuthContext';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../@types/navigation';
+import { useAuth } from '../contexts/AuthContext'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { RootStackParamList } from '../@types/navigation'
 
-const emailSchema = z.string().email({ message: "Email inválido" });
-const passwordSchema = z.string().min(8, { message: "A senha deve ter pelo menos 8 caracteres" })
-  .regex(/[A-Z]/, { message: "A senha deve conter pelo menos uma letra maiúscula" })
-  .regex(/[a-z]/, { message: "A senha deve conter pelo menos uma letra minúscula" })
-  .regex(/[0-9]/, { message: "A senha deve conter pelo menos um número" })
-  .regex(/[^a-zA-Z0-9]/, { message: "A senha deve conter pelo menos um caractere especial" });
+const emailSchema = z.string().email({ message: 'Email inválido' })
+const passwordSchema = z
+  .string()
+  .min(8, { message: 'A senha deve ter pelo menos 8 caracteres' })
+  .regex(/[A-Z]/, {
+    message: 'A senha deve conter pelo menos uma letra maiúscula',
+  })
+  .regex(/[a-z]/, {
+    message: 'A senha deve conter pelo menos uma letra minúscula',
+  })
+  .regex(/[0-9]/, { message: 'A senha deve conter pelo menos um número' })
+  .regex(/[^a-zA-Z0-9]/, {
+    message: 'A senha deve conter pelo menos um caractere especial',
+  })
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const { onLogin } = useAuth();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const { onLogin } = useAuth()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   const handleLogin = () => {
-    const emailValidation = emailSchema.safeParse(email);
-    const passwordValidation = passwordSchema.safeParse(password);
+    const emailValidation = emailSchema.safeParse(email)
+    const passwordValidation = passwordSchema.safeParse(password)
 
     // if (!emailValidation.success) {
     //   setEmailError(emailValidation.error.errors[0].message);
@@ -40,8 +48,8 @@ export function Login() {
     console.log(email)
     console.log(password)
 
-    onLogin!(email, password);
-  };
+    onLogin!(email, password)
+  }
 
   return (
     <View style={styles.container}>
@@ -55,7 +63,7 @@ export function Login() {
         autoCapitalize="none"
       />
       {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-      
+
       <Text style={styles.label}>Senha</Text>
       <TextInput
         style={styles.input}
@@ -65,16 +73,21 @@ export function Login() {
         secureTextEntry
         autoCapitalize="none"
       />
-      {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-      
+      {passwordError ? (
+        <Text style={styles.errorText}>{passwordError}</Text>
+      ) : null}
+
       <Button title="Entrar" onPress={handleLogin} />
 
-      <Button title="Criar conta" onPress={() => {
-        navigation.navigate('Register')
-      }} />
+      <Button
+        title="Criar conta"
+        onPress={() => {
+          navigation.navigate('Register')
+        }}
+      />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -98,4 +111,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 8,
   },
-});
+})
