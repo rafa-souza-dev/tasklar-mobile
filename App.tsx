@@ -1,15 +1,16 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { AuthProvider } from './src/contexts/AuthContext'
-import { RootStackParamList } from './src/@types/navigation'
 import { Router } from './router'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const queryClient = new QueryClient()
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router />
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
