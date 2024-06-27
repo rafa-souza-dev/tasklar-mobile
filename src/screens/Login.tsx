@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native'
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+} from 'react-native'
 import { z } from 'zod'
 
 import { useAuth } from '../contexts/AuthContext'
@@ -73,7 +79,9 @@ export function Login() {
           secureTextEntry
           autoCapitalize="none"
         />
-        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+        {passwordError ? (
+          <Text style={styles.errorText}>{passwordError}</Text>
+        ) : null}
       </View>
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Entrar</Text>
@@ -156,4 +164,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Login;
+export default Login
