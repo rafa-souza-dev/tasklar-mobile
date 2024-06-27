@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   View,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   Text,
+  Alert,
 } from 'react-native'
 import { z } from 'zod'
 
@@ -32,26 +33,32 @@ export function Login() {
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  const { onLogin } = useAuth()
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const { onLogin } = useAuth()
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const emailValidation = emailSchema.safeParse(email)
     const passwordValidation = passwordSchema.safeParse(password)
 
     if (!emailValidation.success) {
       setEmailError(emailValidation.error.errors[0].message)
+      return
     } else {
       setEmailError('')
     }
 
     if (!passwordValidation.success) {
       setPasswordError(passwordValidation.error.errors[0].message)
+      return
     } else {
       setPasswordError('')
     }
 
-    onLogin!(email, password)
+    const response = await onLogin(email, password)
+
+    if (response.error) {
+      Alert.alert('Erro ao se autenticar', 'E-mail e/ou senha inválidos.')
+    }
   }
 
   return (
