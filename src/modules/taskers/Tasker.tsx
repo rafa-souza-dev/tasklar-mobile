@@ -1,7 +1,17 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 
-export function Tasker() {
+type TaskerProps = {
+  name: string
+  description: string
+  rateValue: number
+  rateQuantity: number
+  valueBRL: number
+}
+
+export function Tasker(props: TaskerProps) {
+  const description = props.description.slice(0, 30) + '...'
+
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.main}>
@@ -11,10 +21,8 @@ export function Tasker() {
             source={require('../../../assets/favicon.png')}
           />
           <View style={styles.nameAndDescription}>
-            <Text style={styles.name}>Isaac. O</Text>
-            <Text style={styles.description}>
-              I’m a UIUX Designer, this is one of my pro...
-            </Text>
+            <Text style={styles.name}>{props.name}</Text>
+            <Text style={styles.description}>{description}</Text>
           </View>
         </View>
         <Image source={require('../../../assets/verify-icon.png')} />
@@ -24,14 +32,14 @@ export function Tasker() {
         <View style={styles.rate}>
           <Image source={require('../../../assets/star-blue.png')} />
           <View style={styles.rateDetails}>
-            <Text style={styles.rateValue}>5.0</Text>
-            <Text style={styles.rateQuantity}>(24)</Text>
+            <Text style={styles.rateValue}>{props.rateValue}</Text>
+            <Text style={styles.rateQuantity}>({props.rateQuantity})</Text>
           </View>
         </View>
 
         <View style={styles.value}>
           <Text style={styles.valueTitle}>Valor por hora:</Text>
-          <Text style={styles.valueBRL}>R$ 120,00</Text>
+          <Text style={styles.valueBRL}>R$ {props.valueBRL}</Text>
         </View>
       </View>
     </TouchableOpacity>

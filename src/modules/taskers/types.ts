@@ -8,8 +8,13 @@ export type Period = {
   title: string
 }
 
+type User = {
+  name: string
+}
+
 export type Tasker = {
   id: number
+  user: User
   category: Category
   periods: Period[]
   phone: string
