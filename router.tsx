@@ -47,15 +47,27 @@ function BottomTabs() {
           borderTopColor: 'transparent',
         },
         tabBarShowLabel: false,
-        tabBarIcon: () => <Image source={require('./assets/home-white.png')} />,
       }}
     >
       <Tab.Screen
         name="Home"
         component={TaskerStack}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image source={require('./assets/home-white.png')} />
+          ),
+        }}
       />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: () => (
+            <Image source={require('./assets/profile-white.png')} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   )
 }
