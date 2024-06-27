@@ -9,9 +9,11 @@ import { Home } from './src/screens/Home/Home'
 import { Register } from './src/screens/Register/Register'
 import Login from './src/screens/Login'
 import { Profile } from './src/screens/Profile'
+import { RootStackParamList, RootTabsParamList } from './src/@types/navigation'
+import { TaskerDetails } from './src/screens/TaskerDetails'
 
-const Stack = createNativeStackNavigator()
-const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator<RootStackParamList>()
+const Tab = createBottomTabNavigator<RootTabsParamList>()
 
 export function Router() {
   const { authState } = useAuth()
@@ -38,36 +40,39 @@ export function Router() {
 
 function BottomTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#12229D',
+          borderTopColor: 'transparent',
+        },
+        tabBarShowLabel: false,
+        tabBarIcon: () => <Image source={require('./assets/home-white.png')} />,
+      }}
+    >
       <Tab.Screen
-        options={{
-          tabBarStyle: {
-            backgroundColor: '#12229D',
-            borderTopColor: 'transparent',
-          },
-          tabBarShowLabel: false,
-          tabBarIcon: () => (
-            <Image source={require('./assets/home-white.png')} />
-          ),
-        }}
         name="Home"
-        component={Home}
+        component={TaskerStack}
+        options={{ headerShown: false }}
       />
-
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarStyle: {
-            backgroundColor: '#12229D',
-            borderTopColor: 'transparent',
-          },
-          tabBarShowLabel: false,
-          tabBarIcon: () => (
-            <Image source={require('./assets/profile-white.png')} />
-          ),
-        }}
-      />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
+  )
+}
+
+function TaskerStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TaskerList"
+        component={Home}
+        options={{ title: 'Encontre prestadores' }}
+      />
+      <Stack.Screen
+        name="TaskerDetails"
+        component={TaskerDetails}
+        options={{ title: 'Detalhes do prestador' }}
+      />
+    </Stack.Navigator>
   )
 }

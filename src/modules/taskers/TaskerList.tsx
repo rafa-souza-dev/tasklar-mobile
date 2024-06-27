@@ -16,6 +16,7 @@ export function TaskerList() {
       <View style={styles.container}>
         {taskers?.map((tasker) => (
           <TaskerItem
+            id={tasker.id}
             key={tasker.id}
             name={tasker.user.name}
             description={tasker.description}

@@ -1,7 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { RootStackParamList } from '../../@types/navigation'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
 
-type TaskerProps = {
+type TaskerItemNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home'
+>
+
+type TaskerItemProps = {
+  id: number
   name: string
   description: string
   rateValue: number
@@ -9,11 +18,19 @@ type TaskerProps = {
   valueBRL: number
 }
 
-export function TaskerItem(props: TaskerProps) {
+export function TaskerItem(props: TaskerItemProps) {
   const description = props.description.slice(0, 35) + '...'
+  const navigation = useNavigation<TaskerItemNavigationProp>()
+
+  function handleNavigateToTaskerDetails() {
+    navigation.navigate('TaskerDetails', { id: props.id })
+  }
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handleNavigateToTaskerDetails}
+    >
       <View style={styles.main}>
         <View style={styles.taskerDetails}>
           <Image
