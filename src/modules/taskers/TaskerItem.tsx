@@ -9,8 +9,8 @@ type TaskerProps = {
   valueBRL: number
 }
 
-export function Tasker(props: TaskerProps) {
-  const description = props.description.slice(0, 30) + '...'
+export function TaskerItem(props: TaskerProps) {
+  const description = props.description.slice(0, 35) + '...'
 
   return (
     <TouchableOpacity style={styles.container}>

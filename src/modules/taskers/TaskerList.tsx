@@ -1,7 +1,8 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Tasker } from './Tasker'
+
 import { useTaskers } from './stores'
 import { Skeleton } from './Skeleton'
+import { TaskerItem } from './TaskerItem'
 
 export function TaskerList() {
   const { data: taskers, isLoading } = useTaskers()
@@ -14,7 +15,7 @@ export function TaskerList() {
     <ScrollView style={styles.scroll}>
       <View style={styles.container}>
         {taskers?.map((tasker) => (
-          <Tasker
+          <TaskerItem
             key={tasker.id}
             name={tasker.user.name}
             description={tasker.description}
