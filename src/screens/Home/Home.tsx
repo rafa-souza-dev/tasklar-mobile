@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 
-import { TaskerList } from '../modules/taskers/TaskerList'
+import { TaskerList } from '../../modules/taskers/TaskerList'
 
 export function Home() {
   return (

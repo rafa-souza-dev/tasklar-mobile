@@ -1,17 +1,20 @@
-import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+// src/router.tsx
 
-import { useAuth } from './src/contexts/AuthContext'
-import { Home } from './src/screens/Home'
-import { Login } from './src/screens/Login'
-import { Register } from './src/screens/Register'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator()
-const Tab = createBottomTabNavigator()
+import { useAuth } from './src/contexts/AuthContext';
+import { Home } from './src/screens/Home/Home';
+import { Login } from './src/screens/Login/Login';
+import { Register } from './src/screens/Register/Register';
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export function Router() {
-  const { authState } = useAuth()
+  const { authState } = useAuth();
 
   return (
     <NavigationContainer>
@@ -30,7 +33,7 @@ export function Router() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 }
 
 function BottomTabs() {
@@ -38,5 +41,5 @@ function BottomTabs() {
     <Tab.Navigator>
       <Tab.Screen name="Home" component={Home} />
     </Tab.Navigator>
-  )
+  );
 }
