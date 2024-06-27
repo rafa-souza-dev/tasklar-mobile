@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
+import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native'
 import { z } from 'zod'
 
 import { useAuth } from '../contexts/AuthContext'
@@ -50,38 +50,45 @@ export function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Digite seu email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-
-      <Text style={styles.label}>Senha</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Digite sua senha"
-        secureTextEntry
-        autoCapitalize="none"
-      />
-      {passwordError ? (
-        <Text style={styles.errorText}>{passwordError}</Text>
-      ) : null}
-
-      <Button title="Entrar" onPress={handleLogin} />
-
-      <Button
-        title="Criar conta"
+      <Text style={styles.welcomeText}>Bem-vindo!</Text>
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Digite seu email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+      </View>
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Digite sua senha"
+          secureTextEntry
+          autoCapitalize="none"
+        />
+        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+      </View>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Entrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.signupButton}
         onPress={() => {
           navigation.navigate('Register')
         }}
-      />
+      >
+        <Text style={styles.signupButtonText}>Criar conta</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -90,22 +97,63 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    padding: 20,
+  },
+  welcomeText: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: '#2b2b2b',
+  },
+  inputGroup: {
+    width: '100%',
+    marginBottom: 15,
   },
   label: {
-    fontSize: 16,
-    marginBottom: 8,
+    color: '#2b2b2b',
+    marginBottom: 5,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    width: '100%',
+    padding: 10,
     borderWidth: 1,
-    marginBottom: 8,
-    paddingHorizontal: 8,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  loginButton: {
+    width: '100%',
+    padding: 15,
+    backgroundColor: '#0000FF',
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+  },
+  signupButton: {
+    width: '100%',
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    alignItems: 'center',
+    borderColor: '#0000FF',
+    borderWidth: 2,
+    marginBottom: 10,
+  },
+  signupButtonText: {
+    color: '#0000FF',
+  },
+  forgotPassword: {
+    color: '#0000FF',
+    marginTop: 10,
   },
   errorText: {
     color: 'red',
     fontSize: 12,
-    marginBottom: 8,
+    marginTop: 5,
   },
 })
+
+export default Login;

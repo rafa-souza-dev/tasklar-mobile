@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { useAuth } from '../contexts/AuthContext'
-import { TaskerList } from '../modules/taskers/TaskerList'
+import { useAuth } from '../../contexts/AuthContext';
+import { TaskerList } from '../../modules/taskers/TaskerList';
 
 export function Home() {
   const { onLogout } = useAuth()
