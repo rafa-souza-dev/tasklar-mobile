@@ -15,3 +15,13 @@ export function useTasker(taskerId: string) {
     enabled: Boolean(taskerId),
   })
 }
+
+export function useFormattedTasker(taskerId: string) {
+  const queryTasker = useTasker(taskerId)
+  const formattedHourlyRate = Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(Number(queryTasker.data?.hourly_rate))
+
+  return { ...queryTasker, formattedHourlyRate }
+}

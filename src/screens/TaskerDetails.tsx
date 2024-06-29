@@ -1,9 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { RouteProp } from '@react-navigation/native'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native'
 
 import { RootStackParamList } from '../@types/navigation'
-import { useTasker } from '../modules/taskers/stores'
+import { useFormattedTasker } from '../modules/taskers/stores'
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'TaskerDetails'>
 
@@ -13,7 +20,7 @@ type TaskerDetailsProps = {
 
 export function TaskerDetails(props: TaskerDetailsProps) {
   const id = props.route.params.id
-  const { data: tasker } = useTasker(id)
+  const { data: tasker, formattedHourlyRate } = useFormattedTasker(id)
 
   return (
     <View style={styles.container}>
@@ -29,12 +36,9 @@ export function TaskerDetails(props: TaskerDetailsProps) {
             <Text style={styles.name}>{tasker?.user.name}</Text>
             <Text style={styles.category}>{tasker?.category.name}</Text>
           </View>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae
-            iste repellendus minus numquam, tempore, repellat culpa expedita
-            aspernatur aliquid inventore ab autem modi sint reiciendis ipsam.
-            Iusto ullam libero ipsum.
-          </Text>
+          <ScrollView style={styles.descriptionContainer}>
+            <Text style={styles.description}>{tasker?.description}</Text>
+          </ScrollView>
         </View>
       </View>
 
@@ -56,7 +60,7 @@ export function TaskerDetails(props: TaskerDetailsProps) {
 
           <View style={styles.value}>
             <Text style={styles.valueTitle}>Valor por hora:</Text>
-            <Text style={styles.valueBRL}>R$ 120,00</Text>
+            <Text style={styles.valueBRL}>{formattedHourlyRate}</Text>
           </View>
         </View>
 
@@ -71,8 +75,12 @@ export function TaskerDetails(props: TaskerDetailsProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 16,
     justifyContent: 'space-between',
+    paddingBottom: 24,
+  },
+  descriptionContainer: {
+    maxHeight: 300,
   },
   imageContainer: {
     shadowColor: '#000',
