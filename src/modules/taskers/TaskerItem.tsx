@@ -10,7 +10,7 @@ type TaskerItemNavigationProp = NativeStackNavigationProp<
 >
 
 type TaskerItemProps = {
-  id: string
+  id: number
   name: string
   description: string
   rateValue: number

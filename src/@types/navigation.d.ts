@@ -3,7 +3,7 @@ export type RootStackParamList = {
   Register: undefined
   Tabs: undefined
   Home: undefined
-  TaskerDetails: { id: string }
+  TaskerDetails: { id: number }
   TaskerList: undefined
 }
 

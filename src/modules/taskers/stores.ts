@@ -8,7 +8,7 @@ export function useTaskers() {
   })
 }
 
-export function useTasker(taskerId: string) {
+export function useTasker(taskerId: number) {
   return useQuery({
     queryKey: ['tasker', taskerId],
     queryFn: () => getTasker(taskerId),
@@ -16,7 +16,7 @@ export function useTasker(taskerId: string) {
   })
 }
 
-export function useFormattedTasker(taskerId: string) {
+export function useFormattedTasker(taskerId: number) {
   const queryTasker = useTasker(taskerId)
   const formattedHourlyRate = Intl.NumberFormat('pt-BR', {
     style: 'currency',

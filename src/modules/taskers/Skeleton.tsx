@@ -1,4 +1,3 @@
-import React from 'react'
 import ContentLoader, { Rect } from 'react-content-loader/native'
 
 interface SkeletonProps {
