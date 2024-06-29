@@ -15,6 +15,9 @@ import { TaskerDetails } from './src/screens/TaskerDetails'
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
 
+const focusedColor = '#00FFFF'
+const unfocusedColor = '#FFFFFF'
+
 export function Router() {
   const { authState } = useAuth()
 
@@ -54,8 +57,11 @@ function BottomTabs() {
         component={TaskerStack}
         options={{
           headerShown: false,
-          tabBarIcon: () => (
-            <Image source={require('./assets/home-white.png')} />
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('./assets/home-white.png')}
+              style={{ tintColor: tintColor(focused) }}
+            />
           ),
         }}
       />
@@ -63,8 +69,11 @@ function BottomTabs() {
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: () => (
-            <Image source={require('./assets/profile-white.png')} />
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('./assets/profile-white.png')}
+              style={{ tintColor: tintColor(focused) }}
+            />
           ),
         }}
       />
@@ -87,4 +96,10 @@ function TaskerStack() {
       />
     </Stack.Navigator>
   )
+}
+
+function tintColor(focused: boolean) {
+  const color = focused ? focusedColor : unfocusedColor
+
+  return color
 }
