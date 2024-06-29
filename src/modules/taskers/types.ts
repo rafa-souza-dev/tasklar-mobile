@@ -12,19 +12,24 @@ type User = {
   name: string
 }
 
-export type Tasker = {
+export type TaskerAbridged = {
   id: number
   user: User
-  category: Category
   periods: Period[]
   phone: string
   hourly_rate: number
   description: string
 }
 
+export type Tasker = TaskerAbridged & {
+  category: Category
+}
+
 export type GetTaskersResponse = {
   count: number
   next: string
   previous: string
-  results: Tasker[]
+  results: TaskerAbridged[]
 }
+
+export type GetTaskerDetailsResponse = Tasker
