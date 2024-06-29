@@ -15,7 +15,7 @@ import { TaskerDetails } from './src/screens/TaskerDetails'
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
 
-const focusedColor = '#00FFFF'
+const focusedColor = '#FF7F50'
 const unfocusedColor = '#FFFFFF'
 
 export function Router() {
