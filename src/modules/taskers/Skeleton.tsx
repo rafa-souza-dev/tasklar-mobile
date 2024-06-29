@@ -4,9 +4,15 @@ interface SkeletonProps {
   width: string | number
   height: number
   borderRadius?: number
+  styles?: Record<string, string | number>
 }
 
-export function Skeleton({ width, height, borderRadius = 16 }: SkeletonProps) {
+export function Skeleton({
+  width,
+  height,
+  borderRadius = 16,
+  styles,
+}: SkeletonProps) {
   return (
     <ContentLoader
       speed={2}
@@ -14,6 +20,7 @@ export function Skeleton({ width, height, borderRadius = 16 }: SkeletonProps) {
       height={height}
       backgroundColor="#B3B3B3"
       foregroundColor="#D0D0D0"
+      {...styles}
     >
       <Rect
         x="0"

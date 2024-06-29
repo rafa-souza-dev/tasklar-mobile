@@ -1,33 +1,19 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { View } from 'react-native-ui-lib'
-import { Category } from './types'
 import { useState } from 'react'
 
-const categories: Category[] = [
-  {
-    id: 1,
-    name: 'Faxina',
-  },
-  {
-    id: 2,
-    name: 'Jardinagem',
-  },
-  {
-    id: 3,
-    name: 'Reparos',
-  },
-  {
-    id: 4,
-    name: 'Eletricista',
-  },
-  {
-    id: 5,
-    name: 'Pintura',
-  },
-] as const
+import { useCategories } from '../categories/store'
+import { SkeletonTaskerFilter } from './SkeletonTaskerFilter'
 
 export function TaskerFilter() {
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1)
+  const { data: categories, isLoading } = useCategories()
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  )
+
+  if (isLoading) {
+    return <SkeletonTaskerFilter />
+  }
 
   return (
     <View
@@ -36,7 +22,7 @@ export function TaskerFilter() {
       }}
     >
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {categories.map((category) => {
+        {categories?.map((category) => {
           const isSelected = category.id === selectedCategoryId
           const buttonStyle = isSelected ? styles.activeButton : styles.button
           const labelStyle = isSelected ? styles.activeLabel : styles.label

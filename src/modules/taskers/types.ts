@@ -1,7 +1,4 @@
-export type Category = {
-  id: number
-  name: string
-}
+import { Category } from '../categories/types'
 
 export type Period = {
   id: number
