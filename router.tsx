@@ -87,12 +87,12 @@ function TaskerStack() {
       <Stack.Screen
         name="TaskerList"
         component={Home}
-        options={{ title: 'Encontre prestadores' }}
+        options={{ title: 'Encontre Prestadores' }}
       />
       <Stack.Screen
         name="TaskerDetails"
         component={TaskerDetails}
-        options={{ title: 'Detalhes do prestador' }}
+        options={{ title: 'Detalhes do Prestador' }}
       />
     </Stack.Navigator>
   )
