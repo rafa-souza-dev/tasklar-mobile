@@ -1,11 +1,19 @@
 import { StyleSheet, View } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TaskerList } from '../../modules/taskers/TaskerList'
 import { TaskerFilter } from '../../modules/taskers/TaskerFilter'
+import { useIsFocused } from '@react-navigation/native'
 
 export function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>()
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (isFocused) {
+      setSelectedCategory(undefined)
+    }
+  }, [isFocused])
 
   return (
     <View style={styles.container}>
