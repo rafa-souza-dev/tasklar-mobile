@@ -1,29 +1,55 @@
-import { ScrollView, StyleSheet, View, Text } from 'react-native'
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native'
 
 import { useFormattedTaskers } from './stores'
 import { Skeleton } from './Skeleton'
 import { TaskerItem } from './TaskerItem'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 type TaskerListProps = {
   category?: string
 }
 
 export function TaskerList(props: TaskerListProps) {
+  const [queryParams, setQueryParams] = useState<{
+    limit: string | null | undefined
+    offset: string | null | undefined
+  }>()
   const {
     data: taskers,
-    isLoading,
     refetch,
     hasTaskers,
+    limit,
+    offset,
+    isFetching,
+    next,
   } = useFormattedTaskers({
     category: props.category,
+    limit: queryParams?.limit,
+    offset: queryParams?.offset,
   })
 
   useEffect(() => {
     refetch()
+  }, [refetch, queryParams])
+
+  useEffect(() => {
+    if (queryParams) {
+      setQueryParams(undefined)
+    } else {
+      refetch()
+    }
   }, [props.category, refetch])
 
-  if (isLoading) {
+  if (isFetching && !queryParams) {
     return <SkeletonTaskerList />
   }
 
@@ -38,47 +64,68 @@ export function TaskerList(props: TaskerListProps) {
   }
 
   return (
-    <ScrollView style={styles.scroll}>
-      <View style={styles.container}>
-        {taskers?.map((tasker) => (
-          <TaskerItem
-            id={tasker.id}
-            key={tasker.id}
-            name={tasker.user.name}
-            description={tasker.description}
-            rateQuantity={5.0}
-            rateValue={24}
-            valueBRL={tasker.hourly_rate}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <SafeAreaView style={styles.scroll}>
+      <FlatList
+        data={taskers}
+        renderItem={({ item }) => (
+          <View style={{ marginVertical: 10 }}>
+            <TaskerItem
+              id={item.id}
+              key={item.id}
+              name={item.user.name}
+              description={item.description}
+              rateQuantity={5.0}
+              rateValue={24}
+              valueBRL={item.hourly_rate}
+            />
+          </View>
+        )}
+        keyExtractor={(item) => String(item.id)}
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListFooterComponent={<Loading loading={Boolean(next)} />}
+        onEndReached={() => {
+          if (next) {
+            setQueryParams({
+              limit,
+              offset,
+            })
+          }
+        }}
+        onEndReachedThreshold={0.1}
+      />
+    </SafeAreaView>
   )
 }
 
-function SkeletonTaskerList() {
-  return (
-    <ScrollView style={styles.scroll}>
-      <View style={styles.container}>
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
-      </View>
-    </ScrollView>
-  )
+function Loading({ loading }: { loading: boolean }) {
+  if (loading) return <ActivityIndicator size={'large'} color={'white'} />
+
+  return null
 }
 
 function SkeletonTasker() {
   return <Skeleton width={'100%'} height={130} />
 }
 
+function SkeletonTaskerList() {
+  return (
+    <ScrollView style={styles.scroll}>
+      <View style={{ flex: 1, paddingHorizontal: 16, gap: 20, marginTop: 10 }}>
+        <SkeletonTasker />
+        <SkeletonTasker />
+        <SkeletonTasker />
+        <SkeletonTasker />
+        <SkeletonTasker />
+      </View>
+    </ScrollView>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    gap: 16,
+    paddingHorizontal: 16,
   },
   scroll: {
     flex: 1,

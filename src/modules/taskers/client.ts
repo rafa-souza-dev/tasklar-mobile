@@ -9,11 +9,13 @@ const TASKERS = '/taskers'
 const TASKER_DETAILS = (taskerId: number) => `${TASKERS}/${taskerId}`
 
 export async function getTaskers(params?: GetTaskersRequest) {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
   const response = await client.get<GetTaskersResponse>(TASKERS, {
     params,
   })
 
-  return response.data.results
+  return response.data
 }
 
 export async function getTasker(taskerId: number) {

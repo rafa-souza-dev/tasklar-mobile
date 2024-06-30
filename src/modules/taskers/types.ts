@@ -26,6 +26,8 @@ export type GetTaskersRequest = {
   category?: string
   uf?: string
   city?: string
+  limit?: string | null
+  offset?: string | null
 }
 
 export type GetTaskersResponse = {
