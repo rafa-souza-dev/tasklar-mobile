@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native'
 
 import { z } from 'zod'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 
 const emailSchema = z.string().email({ message: 'Email inválido' })
 const passwordSchema = z

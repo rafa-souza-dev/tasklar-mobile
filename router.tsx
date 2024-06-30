@@ -5,12 +5,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Image } from 'react-native'
 
 import { useAuth } from './src/contexts/AuthContext'
-import { Home } from './src/screens/Home/Home'
-import { Register } from './src/screens/Register/Register'
+import { Home } from './src/screens/Home'
 import Login from './src/screens/Login'
 import { Profile } from './src/screens/Profile'
 import { RootStackParamList, RootTabsParamList } from './src/@types/navigation'
 import { TaskerDetails } from './src/screens/TaskerDetails'
+import { Register } from './src/screens/Register'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()

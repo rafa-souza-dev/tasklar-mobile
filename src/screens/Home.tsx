@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { useEffect, useState } from 'react'
 
-import { TaskerList } from '../../modules/taskers/TaskerList'
-import { TaskerFilter } from '../../modules/taskers/TaskerFilter'
+import { TaskerList } from '../modules/taskers/TaskerList'
+import { TaskerFilter } from '../modules/taskers/TaskerFilter'
 import { useIsFocused } from '@react-navigation/native'
 
 export function Home() {

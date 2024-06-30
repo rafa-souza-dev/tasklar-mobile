@@ -39,25 +39,27 @@ export function Login() {
   const handleLogin = async () => {
     const emailValidation = emailSchema.safeParse(email)
     const passwordValidation = passwordSchema.safeParse(password)
+    const hasEmailError = !emailValidation.success
+    const hasPasswordError = !passwordValidation.success
 
-    if (!emailValidation.success) {
+    if (hasEmailError) {
       setEmailError(emailValidation.error.errors[0].message)
-      return
     } else {
       setEmailError('')
     }
 
-    if (!passwordValidation.success) {
+    if (hasPasswordError) {
       setPasswordError(passwordValidation.error.errors[0].message)
-      return
     } else {
       setPasswordError('')
     }
 
-    const response = await onLogin(email, password)
+    if (!hasEmailError && !hasPasswordError) {
+      const response = await onLogin(email, password)
 
-    if (response.error) {
-      Alert.alert('Erro ao se autenticar', 'E-mail e/ou senha inválidos.')
+      if (response.error) {
+        Alert.alert('Erro ao se autenticar', 'E-mail e/ou senha inválidos.')
+      }
     }
   }
 
