@@ -1,15 +1,19 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { View } from 'react-native-ui-lib'
-import { useState } from 'react'
 
 import { useCategories } from '../categories/store'
 import { SkeletonTaskerFilter } from './SkeletonTaskerFilter'
 
-export function TaskerFilter() {
+type TaskerFilterProps = {
+  selectedCategory?: string
+  setSelectedCategory: (name?: string) => void
+}
+
+export function TaskerFilter({
+  selectedCategory,
+  setSelectedCategory,
+}: TaskerFilterProps) {
   const { data: categories, isLoading } = useCategories()
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    null,
-  )
 
   if (isLoading) {
     return <SkeletonTaskerFilter />
@@ -23,7 +27,7 @@ export function TaskerFilter() {
     >
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {categories?.map((category) => {
-          const isSelected = category.id === selectedCategoryId
+          const isSelected = category.name === selectedCategory
           const buttonStyle = isSelected ? styles.activeButton : styles.button
           const labelStyle = isSelected ? styles.activeLabel : styles.label
 
@@ -32,7 +36,12 @@ export function TaskerFilter() {
               key={category.id}
               style={buttonStyle}
               onPress={() => {
-                setSelectedCategoryId(category.id)
+                if (isSelected) {
+                  setSelectedCategory(undefined)
+                  return
+                }
+
+                setSelectedCategory(category.name)
               }}
             >
               <Text style={labelStyle}>{category.name}</Text>

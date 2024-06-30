@@ -1,14 +1,40 @@
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, Text } from 'react-native'
 
-import { useTaskers } from './stores'
+import { useFormattedTaskers } from './stores'
 import { Skeleton } from './Skeleton'
 import { TaskerItem } from './TaskerItem'
+import { useEffect } from 'react'
 
-export function TaskerList() {
-  const { data: taskers, isLoading } = useTaskers()
+type TaskerListProps = {
+  category?: string
+}
+
+export function TaskerList(props: TaskerListProps) {
+  const {
+    data: taskers,
+    isLoading,
+    refetch,
+    hasTaskers,
+  } = useFormattedTaskers({
+    category: props.category,
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [props.category, refetch])
 
   if (isLoading) {
     return <SkeletonTaskerList />
+  }
+
+  if (!hasTaskers) {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Text style={styles.emptyStateText}>
+          Nenhum prestador foi encontrado, tente filtrar por outra categoria.
+        </Text>
+      </View>
+    )
   }
 
   return (
@@ -56,5 +82,16 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flex: 1,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    color: 'white',
+    fontSize: 24,
+    textAlign: 'center',
   },
 })

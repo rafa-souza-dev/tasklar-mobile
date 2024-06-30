@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { getTasker, getTaskers } from './client'
 
-export function useTaskers() {
+import { getTasker, getTaskers } from './client'
+import { GetTaskersRequest } from './types'
+
+export function useTaskers(params?: GetTaskersRequest) {
   return useQuery({
     queryKey: ['taskers'],
-    queryFn: getTaskers,
+    queryFn: () => getTaskers(params),
   })
 }
 
@@ -24,4 +26,11 @@ export function useFormattedTasker(taskerId: number) {
   }).format(Number(queryTasker.data?.hourly_rate))
 
   return { ...queryTasker, formattedHourlyRate }
+}
+
+export function useFormattedTaskers(params?: GetTaskersRequest) {
+  const queryTaskers = useTaskers(params)
+  const hasTaskers = Boolean(queryTaskers.data?.length)
+
+  return { ...queryTaskers, hasTaskers }
 }

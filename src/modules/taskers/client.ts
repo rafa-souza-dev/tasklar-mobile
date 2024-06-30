@@ -1,11 +1,17 @@
 import { client } from '../../client'
-import { GetTaskerDetailsResponse, GetTaskersResponse } from './types'
+import {
+  GetTaskerDetailsResponse,
+  GetTaskersRequest,
+  GetTaskersResponse,
+} from './types'
 
 const TASKERS = '/taskers'
 const TASKER_DETAILS = (taskerId: number) => `${TASKERS}/${taskerId}`
 
-export async function getTaskers() {
-  const response = await client.get<GetTaskersResponse>(TASKERS)
+export async function getTaskers(params?: GetTaskersRequest) {
+  const response = await client.get<GetTaskersResponse>(TASKERS, {
+    params,
+  })
 
   return response.data.results
 }

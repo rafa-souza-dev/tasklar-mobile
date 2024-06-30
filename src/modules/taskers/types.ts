@@ -22,6 +22,12 @@ export type Tasker = TaskerAbridged & {
   category: Category
 }
 
+export type GetTaskersRequest = {
+  category?: string
+  uf?: string
+  city?: string
+}
+
 export type GetTaskersResponse = {
   count: number
   next: string
