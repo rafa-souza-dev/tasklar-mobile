@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   Alert,
+  Image
 } from 'react-native'
 import { z } from 'zod'
 
@@ -65,7 +66,10 @@ export function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcomeText}>Bem-vindo!</Text>
+      <Image source={require('./images/loginImage.png')} style={styles.image} />
+      <View style={styles.textContainer}>
+        <Text style={styles.welcomeText}>Bem-vindo!</Text>
+      </View>
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -113,18 +117,34 @@ export function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', // Alinha os itens no início do contêiner
+    alignItems: 'center',     // Alinha os itens no início ao longo do eixo vertical
     backgroundColor: '#f0f0f0',
-    padding: 20,
+    padding: 10,
+  },
+  textContainer: {
+    marginTop: 100,
+    alignSelf: 'flex-start', // Alinha o contêiner de texto à esquerda
+    marginBottom: 20,
+    marginHorizontal: 20,
+  },
+  image: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+    position: 'absolute',
+    right: -70,
+    top: 0,
+    marginBottom: 20
   },
   welcomeText: {
     fontSize: 24,
     marginBottom: 20,
-    color: '#2b2b2b',
+    color: '#0000FF',
+    alignSelf: 'flex-start'
   },
   inputGroup: {
-    width: '100%',
+    width: '90%',
     marginBottom: 15,
   },
   label: {
@@ -139,10 +159,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   loginButton: {
-    width: '100%',
+    width: '90%',
     padding: 15,
     backgroundColor: '#0000FF',
-    borderRadius: 5,
+    borderRadius: 20,
     alignItems: 'center',
     marginBottom: 10,
   },
@@ -150,10 +170,10 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   signupButton: {
-    width: '100%',
+    width: '90%',
     padding: 15,
     backgroundColor: 'white',
-    borderRadius: 5,
+    borderRadius: 20,
     alignItems: 'center',
     borderColor: '#0000FF',
     borderWidth: 2,
