@@ -5,8 +5,8 @@ import {
   GetTaskersResponse,
 } from './types'
 
-const TASKERS = '/taskers'
-const TASKER_DETAILS = (taskerId: number) => `${TASKERS}/${taskerId}`
+const TASKERS = '/taskers/'
+const TASKER_DETAILS = (taskerId: number) => `${TASKERS}${taskerId}/`
 
 export async function getTaskers(params?: GetTaskersRequest) {
   await new Promise((resolve) => setTimeout(resolve, 1000))

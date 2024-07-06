@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   descriptionContainer: {
-    maxHeight: 300,
+    maxHeight: 200,
   },
   imageContainer: {
     shadowColor: '#000',
