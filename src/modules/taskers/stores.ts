@@ -35,14 +35,14 @@ export function useFormattedTaskers(params?: GetTaskersRequest) {
   const hasTaskers = Boolean(queryTaskers.data?.results?.length)
   const next = queryTaskers.data?.next
   const previous = queryTaskers.data?.previous
-  let offset
-  let limit
+  let offset: string | undefined
+  let limit: string | undefined
 
   if (next) {
     const nextURL = new URL(String(next))
     const nextURLParams = nextURL.searchParams
-    offset = nextURLParams?.get('offset')
-    limit = nextURLParams?.get('limit')
+    offset = nextURLParams?.get('offset') ?? undefined
+    limit = nextURLParams?.get('limit') ?? undefined
   }
 
   useEffect(() => {

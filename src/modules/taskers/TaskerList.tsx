@@ -13,16 +13,17 @@ import { useFormattedTaskers } from './stores'
 import { Skeleton } from './Skeleton'
 import { TaskerItem } from './TaskerItem'
 import { useEffect, useState } from 'react'
+import { useTaskerFilter } from './TaskerFilterContext'
 
-type TaskerListProps = {
-  category?: string
-}
-
-export function TaskerList(props: TaskerListProps) {
-  const [queryParams, setQueryParams] = useState<{
-    limit: string | null | undefined
-    offset: string | null | undefined
-  }>()
+export function TaskerList() {
+  const { selectedCategory } = useTaskerFilter()
+  const [queryParams, setQueryParams] = useState<
+    | {
+        limit?: string
+        offset?: string
+      }
+    | undefined
+  >(undefined)
   const {
     data: taskers,
     refetch,
@@ -32,7 +33,7 @@ export function TaskerList(props: TaskerListProps) {
     isFetching,
     next,
   } = useFormattedTaskers({
-    category: props.category,
+    category: selectedCategory,
     limit: queryParams?.limit,
     offset: queryParams?.offset,
   })
@@ -47,7 +48,7 @@ export function TaskerList(props: TaskerListProps) {
     } else {
       refetch()
     }
-  }, [props.category, refetch])
+  }, [selectedCategory, refetch])
 
   if (isFetching && !queryParams) {
     return <SkeletonTaskerList />

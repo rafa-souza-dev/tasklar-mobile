@@ -3,17 +3,11 @@ import { View } from 'react-native-ui-lib'
 
 import { useCategories } from '../categories/store'
 import { SkeletonTaskerFilter } from './SkeletonTaskerFilter'
+import { useTaskerFilter } from './TaskerFilterContext'
 
-type TaskerFilterProps = {
-  selectedCategory?: string
-  setSelectedCategory: (name?: string) => void
-}
-
-export function TaskerFilter({
-  selectedCategory,
-  setSelectedCategory,
-}: TaskerFilterProps) {
+export function TaskerFilter() {
   const { data: categories, isLoading } = useCategories()
+  const { selectedCategory, setSelectedCategory } = useTaskerFilter()
 
   if (isLoading) {
     return <SkeletonTaskerFilter />
