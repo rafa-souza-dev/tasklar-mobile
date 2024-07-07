@@ -7,7 +7,7 @@ import { useTaskerFilter } from './TaskerFilterContext'
 
 export function TaskerFilter() {
   const { data: categories, isLoading } = useCategories()
-  const { selectedCategory, setSelectedCategory } = useTaskerFilter()
+  const { params, setSelectedCategory } = useTaskerFilter()
 
   if (isLoading) {
     return <SkeletonTaskerFilter />
@@ -21,7 +21,7 @@ export function TaskerFilter() {
     >
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {categories?.map((category) => {
-          const isSelected = category.name === selectedCategory
+          const isSelected = category.name === params.category
           const buttonStyle = isSelected ? styles.activeButton : styles.button
           const labelStyle = isSelected ? styles.activeLabel : styles.label
 
