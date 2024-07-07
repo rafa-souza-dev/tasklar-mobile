@@ -4,6 +4,7 @@ import { GetTaskersRequest } from './types'
 type TaskerFilterProps = {
   params: GetTaskersRequest
   isFirstPage: boolean
+  clear: () => void
   setSelectedCategory: (category?: string) => void
   setSelectedUf: (uf?: string) => void
   setSelectedCity: (city?: string) => void
@@ -62,6 +63,16 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
     setParams((prevState) => ({ ...prevState, uf, city, ...firstPageParams }))
   }
 
+  function clear() {
+    setParams({
+      category: undefined,
+      uf: undefined,
+      city: undefined,
+      limit: undefined,
+      offset: undefined,
+    })
+  }
+
   return (
     <TaskerFilterContext.Provider
       value={{
@@ -74,6 +85,7 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
         setSelectedOffset,
         setSelectedPage,
         setSelectedLocation,
+        clear,
       }}
     >
       {children}

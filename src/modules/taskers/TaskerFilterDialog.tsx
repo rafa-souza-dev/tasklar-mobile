@@ -21,10 +21,15 @@ export function TaskerFilterDialog() {
   const [selectedCity, setSelectedCity] = useState<string | undefined>(
     undefined,
   )
-  const { setSelectedLocation } = useTaskerFilter()
+  const { setSelectedLocation, clear } = useTaskerFilter()
 
   const applyFilters = () => {
     setSelectedLocation(selectedState, selectedCity)
+    setModalVisible(false)
+  }
+
+  const clearFilters = () => {
+    clear()
     setModalVisible(false)
   }
 
@@ -74,7 +79,14 @@ export function TaskerFilterDialog() {
                   <Picker.Item key={city} label={city} value={city} />
                 ))}
             </Picker>
-            <Button title="Aplicar Filtros" onPress={applyFilters} />
+            <View style={{ gap: 8 }}>
+              <Button title="Aplicar Filtros" onPress={applyFilters} />
+              <Button
+                title="Limpar filtros"
+                onPress={clearFilters}
+                color={'red'}
+              />
+            </View>
           </View>
         </View>
       </Modal>
