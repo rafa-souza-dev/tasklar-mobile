@@ -22,14 +22,17 @@ export function TaskerFilterDialog() {
     undefined,
   )
   const { setSelectedLocation, clear } = useTaskerFilter()
+  const hasLocationFilter = selectedCity && selectedState
 
   const applyFilters = () => {
-    setSelectedLocation(selectedState, selectedCity)
+    if (hasLocationFilter) {
+      setSelectedLocation(selectedState, selectedCity)
+    }
     setModalVisible(false)
   }
 
   const clearFilters = () => {
-    if (selectedState && selectedCity) {
+    if (hasLocationFilter) {
       clear()
       setSelectedState(undefined)
       setSelectedCity(undefined)
@@ -51,7 +54,11 @@ export function TaskerFilterDialog() {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPressOut={() => setModalVisible(false)}
+        >
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Filtros</Text>
             <Picker
@@ -92,7 +99,7 @@ export function TaskerFilterDialog() {
               />
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
     </View>
   )
