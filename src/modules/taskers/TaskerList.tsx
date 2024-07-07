@@ -12,46 +12,20 @@ import {
 import { useFormattedTaskers } from './stores'
 import { Skeleton } from './Skeleton'
 import { TaskerItem } from './TaskerItem'
-import { useEffect, useState } from 'react'
 import { useTaskerFilter } from './TaskerFilterContext'
 
 export function TaskerList() {
-  const { params } = useTaskerFilter()
-
-  const [queryParams, setQueryParams] = useState<
-    | {
-        limit?: string
-        offset?: string
-      }
-    | undefined
-  >(undefined)
+  const { isFirstPage, setSelectedPage } = useTaskerFilter()
   const {
     data: taskers,
-    refetch,
     hasTaskers,
     limit,
     offset,
     isFetching,
     next,
-  } = useFormattedTaskers({
-    category: params.category,
-    limit: queryParams?.limit,
-    offset: queryParams?.offset,
-  })
+  } = useFormattedTaskers()
 
-  useEffect(() => {
-    refetch()
-  }, [refetch, queryParams])
-
-  useEffect(() => {
-    if (queryParams) {
-      setQueryParams(undefined)
-    } else {
-      refetch()
-    }
-  }, [params.category, refetch])
-
-  if (isFetching && !queryParams) {
+  if (isFetching && isFirstPage) {
     return <SkeletonTaskerList />
   }
 
@@ -88,10 +62,7 @@ export function TaskerList() {
         ListFooterComponent={<Loading loading={Boolean(next)} />}
         onEndReached={() => {
           if (next) {
-            setQueryParams({
-              limit,
-              offset,
-            })
+            setSelectedPage(limit, offset)
           }
         }}
         onEndReachedThreshold={0.1}

@@ -9,6 +9,7 @@ type TaskerFilterProps = {
   setSelectedCity: (city?: string) => void
   setSelectedLimit: (limit?: string) => void
   setSelectedOffset: (offset?: string) => void
+  setSelectedPage: (limit?: string, offset?: string) => void
 }
 
 type TaskerFilterProviderProps = {
@@ -52,6 +53,10 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
     setParams((prevState) => ({ ...prevState, offset }))
   }
 
+  function setSelectedPage(limit?: string, offset?: string) {
+    setParams((prevState) => ({ ...prevState, limit, offset }))
+  }
+
   return (
     <TaskerFilterContext.Provider
       value={{
@@ -62,6 +67,7 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
         setSelectedCity,
         setSelectedLimit,
         setSelectedOffset,
+        setSelectedPage,
       }}
     >
       {children}

@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import { getTasker, getTaskers } from './client'
 import { GetTaskersRequest, TaskerAbridged } from './types'
+import { useTaskerFilter } from './TaskerFilterContext'
 
 export function useTaskers(params?: GetTaskersRequest) {
   return useQuery({
@@ -29,7 +31,8 @@ export function useFormattedTasker(taskerId: number) {
   return { ...queryTasker, formattedHourlyRate }
 }
 
-export function useFormattedTaskers(params?: GetTaskersRequest) {
+export function useFormattedTaskers() {
+  const { params } = useTaskerFilter()
   const [data, setData] = useState<TaskerAbridged[]>()
   const queryTaskers = useTaskers(params)
   const hasTaskers = Boolean(queryTaskers.data?.results?.length)
@@ -44,6 +47,10 @@ export function useFormattedTaskers(params?: GetTaskersRequest) {
     offset = nextURLParams?.get('offset') ?? undefined
     limit = nextURLParams?.get('limit') ?? undefined
   }
+
+  useEffect(() => {
+    queryTaskers.refetch()
+  }, [params])
 
   useEffect(() => {
     setData((prev) => {
