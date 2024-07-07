@@ -29,7 +29,11 @@ export function TaskerFilterDialog() {
   }
 
   const clearFilters = () => {
-    clear()
+    if (selectedState && selectedCity) {
+      clear()
+      setSelectedState(undefined)
+      setSelectedCity(undefined)
+    }
     setModalVisible(false)
   }
 
