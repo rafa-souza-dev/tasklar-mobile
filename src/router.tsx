@@ -2,15 +2,16 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Image } from 'react-native'
-
-import { useAuth } from './src/contexts/AuthContext'
-import { Home } from './src/screens/Home'
-import Login from './src/screens/Login'
-import { Profile } from './src/screens/Profile'
-import { RootStackParamList, RootTabsParamList } from './src/@types/navigation'
-import { TaskerDetails } from './src/screens/TaskerDetails'
-import { Register } from './src/screens/Register'
+import { Image, View } from 'react-native'
+import { RootStackParamList, RootTabsParamList } from './@types/navigation'
+import { useAuth } from './contexts/AuthContext'
+import Login from './screens/Login'
+import { Register } from './screens/Register'
+import { Profile } from './screens/Profile'
+import { Home } from './screens/Home'
+import { TaskerDetails } from './screens/TaskerDetails'
+import { TaskerFilterDialog } from './modules/taskers/TaskerFilterDialog'
+import { TaskerFilterProvider } from './modules/taskers/TaskerFilterContext'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -59,7 +60,7 @@ function BottomTabs() {
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/home-white.png')}
+              source={require('../assets/home-white.png')}
               style={{ tintColor: tintColor(focused) }}
             />
           ),
@@ -71,7 +72,7 @@ function BottomTabs() {
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/profile-white.png')}
+              source={require('../assets/profile-white.png')}
               style={{ tintColor: tintColor(focused) }}
             />
           ),
@@ -83,18 +84,27 @@ function BottomTabs() {
 
 function TaskerStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="TaskerList"
-        component={Home}
-        options={{ title: 'Encontre Prestadores' }}
-      />
-      <Stack.Screen
-        name="TaskerDetails"
-        component={TaskerDetails}
-        options={{ title: 'Detalhes do Prestador' }}
-      />
-    </Stack.Navigator>
+    <TaskerFilterProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="TaskerList"
+          component={Home}
+          options={{
+            title: 'Encontre Prestadores',
+            headerRight: () => (
+              <View>
+                <TaskerFilterDialog />
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="TaskerDetails"
+          component={TaskerDetails}
+          options={{ title: 'Detalhes do Prestador' }}
+        />
+      </Stack.Navigator>
+    </TaskerFilterProvider>
   )
 }
 

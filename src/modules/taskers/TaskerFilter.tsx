@@ -1,5 +1,10 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import { View } from 'react-native-ui-lib'
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 import { useCategories } from '../categories/store'
 import { SkeletonTaskerFilter } from './SkeletonTaskerFilter'

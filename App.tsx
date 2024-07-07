@@ -1,9 +1,9 @@
-import React from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from './src/contexts/AuthContext';
-import { Router } from './router';
+import React from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './src/contexts/AuthContext'
+import { Router } from './src/router'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 const App: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const App: React.FC = () => {
         <Router />
       </AuthProvider>
     </QueryClientProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
