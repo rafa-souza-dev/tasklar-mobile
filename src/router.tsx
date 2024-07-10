@@ -9,9 +9,9 @@ import Login from './screens/Login'
 import { Register } from './screens/Register'
 import { Profile } from './screens/Profile'
 import { Home } from './screens/Home'
-import { TaskerDetails } from './screens/TaskerDetails'
-import { TaskerFilterDialog } from './modules/taskers/TaskerFilterDialog'
-import { TaskerFilterProvider } from './modules/taskers/TaskerFilterContext'
+import { JobFilterDialog } from './modules/jobs/JobFilterDialog'
+import { JobFilterProvider } from './modules/jobs/JobFilterContext'
+import { JobDetails } from './screens/JobDetails'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -55,7 +55,7 @@ function BottomTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={TaskerStack}
+        component={JobStack}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -82,29 +82,29 @@ function BottomTabs() {
   )
 }
 
-function TaskerStack() {
+function JobStack() {
   return (
-    <TaskerFilterProvider>
+    <JobFilterProvider>
       <Stack.Navigator>
         <Stack.Screen
-          name="TaskerList"
+          name="JobList"
           component={Home}
           options={{
             title: 'Encontre Prestadores',
             headerRight: () => (
               <View>
-                <TaskerFilterDialog />
+                <JobFilterDialog />
               </View>
             ),
           }}
         />
         <Stack.Screen
-          name="TaskerDetails"
-          component={TaskerDetails}
+          name="JobDetails"
+          component={JobDetails}
           options={{ title: 'Detalhes do Prestador' }}
         />
       </Stack.Navigator>
-    </TaskerFilterProvider>
+    </JobFilterProvider>
   )
 }
 

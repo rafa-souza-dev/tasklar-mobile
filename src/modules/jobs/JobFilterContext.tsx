@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
-import { GetTaskersRequest } from './types'
+import { GetJobsRequest } from './types'
 
-type TaskerFilterProps = {
-  params: GetTaskersRequest
+type JobFilterProps = {
+  params: GetJobsRequest
   isFirstPage: boolean
   clear: () => void
   setSelectedCategory: (category?: string) => void
@@ -14,16 +14,16 @@ type TaskerFilterProps = {
   setSelectedLocation: (uf?: string, city?: string) => void
 }
 
-type TaskerFilterProviderProps = {
+type JobFilterProviderProps = {
   children: ReactNode
 }
 
-export const TaskerFilterContext = createContext<TaskerFilterProps>(
-  {} as TaskerFilterProps,
+export const JobFilterContext = createContext<JobFilterProps>(
+  {} as JobFilterProps,
 )
 
-export function useTaskerFilter() {
-  return useContext(TaskerFilterContext)
+export function useJobFilter() {
+  return useContext(JobFilterContext)
 }
 
 const firstPageParams = {
@@ -31,8 +31,8 @@ const firstPageParams = {
   offset: undefined,
 }
 
-export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
-  const [params, setParams] = useState<GetTaskersRequest>({})
+export function JobFilterProvider({ children }: JobFilterProviderProps) {
+  const [params, setParams] = useState<GetJobsRequest>({})
   const isFirstPage = !params.limit && !params.offset
 
   function setSelectedCategory(category?: string) {
@@ -74,7 +74,7 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
   }
 
   return (
-    <TaskerFilterContext.Provider
+    <JobFilterContext.Provider
       value={{
         params,
         isFirstPage,
@@ -89,6 +89,6 @@ export function TaskerFilterProvider({ children }: TaskerFilterProviderProps) {
       }}
     >
       {children}
-    </TaskerFilterContext.Provider>
+    </JobFilterContext.Provider>
   )
 }

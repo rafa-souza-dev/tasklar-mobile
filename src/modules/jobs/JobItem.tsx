@@ -4,12 +4,12 @@ import { RootStackParamList } from '../../@types/navigation'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 
-type TaskerItemNavigationProp = NativeStackNavigationProp<
+type JobItemNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Home'
 >
 
-type TaskerItemProps = {
+type JobItemProps = {
   id: number
   name: string
   description: string
@@ -18,21 +18,21 @@ type TaskerItemProps = {
   valueBRL: number
 }
 
-export function TaskerItem(props: TaskerItemProps) {
+export function JobItem(props: JobItemProps) {
   const description = props.description.slice(0, 35) + '...'
-  const navigation = useNavigation<TaskerItemNavigationProp>()
+  const navigation = useNavigation<JobItemNavigationProp>()
 
-  function handleNavigateToTaskerDetails() {
-    navigation.navigate('TaskerDetails', { id: props.id })
+  function handleNavigateToJobDetails() {
+    navigation.navigate('JobDetails', { id: props.id })
   }
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={handleNavigateToTaskerDetails}
+      onPress={handleNavigateToJobDetails}
     >
       <View style={styles.main}>
-        <View style={styles.taskerDetails}>
+        <View style={styles.jobDetails}>
           <Image
             style={styles.image}
             source={require('../../../assets/favicon.png')}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  taskerDetails: {
+  jobDetails: {
     flexDirection: 'row',
     gap: 8,
   },

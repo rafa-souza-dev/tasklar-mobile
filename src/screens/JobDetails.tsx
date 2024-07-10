@@ -10,17 +10,17 @@ import {
 } from 'react-native'
 
 import { RootStackParamList } from '../@types/navigation'
-import { useFormattedTasker } from '../modules/taskers/stores'
+import { useFormattedJob } from '../modules/jobs/stores'
 
-type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'TaskerDetails'>
+type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'JobDetails'>
 
-type TaskerDetailsProps = {
+type JobDetailsProps = {
   route: DetailsScreenRouteProp
 }
 
-export function TaskerDetails(props: TaskerDetailsProps) {
+export function JobDetails(props: JobDetailsProps) {
   const id = props.route.params.id
-  const { data: tasker, formattedHourlyRate } = useFormattedTasker(id)
+  const { data: job, formattedHourlyRate } = useFormattedJob(id)
 
   return (
     <View style={styles.container}>
@@ -33,11 +33,11 @@ export function TaskerDetails(props: TaskerDetailsProps) {
         </View>
         <View style={styles.nameAndDescription}>
           <View>
-            <Text style={styles.name}>{tasker?.user.name}</Text>
-            <Text style={styles.category}>{tasker?.category.name}</Text>
+            <Text style={styles.name}>{job?.tasker.user.name}</Text>
+            <Text style={styles.category}>{job?.category.name}</Text>
           </View>
           <ScrollView style={styles.descriptionContainer}>
-            <Text style={styles.description}>{tasker?.description}</Text>
+            <Text style={styles.description}>{job?.description}</Text>
           </ScrollView>
         </View>
       </View>

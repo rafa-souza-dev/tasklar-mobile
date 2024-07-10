@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 
-import { TaskerList } from '../modules/taskers/TaskerList'
-import { TaskerFilter } from '../modules/taskers/TaskerFilter'
+import { JobList } from '../modules/jobs/JobList'
+import { JobFilter } from '../modules/jobs/JobFilter'
 
 export function Home() {
   return (
     <View style={styles.container}>
-      <TaskerFilter />
-      <TaskerList />
+      <JobFilter />
+      <JobList />
     </View>
   )
 }

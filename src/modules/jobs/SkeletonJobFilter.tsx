@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native'
 import { Skeleton } from './Skeleton'
 
-export function SkeletonTaskerFilter() {
+export function SkeletonJobFilter() {
   return (
     <View
       style={{

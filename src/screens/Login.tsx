@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   Alert,
-  Image
+  Image,
 } from 'react-native'
 import { z } from 'zod'
 
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center', // Alinha os itens no início do contêiner
-    alignItems: 'center',     // Alinha os itens no início ao longo do eixo vertical
+    alignItems: 'center', // Alinha os itens no início ao longo do eixo vertical
     backgroundColor: '#f0f0f0',
     padding: 10,
   },
@@ -135,13 +135,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -70,
     top: 0,
-    marginBottom: 20
+    marginBottom: 20,
   },
   welcomeText: {
     fontSize: 24,
     marginBottom: 20,
     color: '#0000FF',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   inputGroup: {
     width: '90%',

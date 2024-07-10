@@ -9,20 +9,27 @@ type User = {
   name: string
 }
 
-export type TaskerAbridged = {
+export type JobAbridged = {
   id: number
-  user: User
-  periods: Period[]
-  phone: string
-  hourly_rate: number
+  days_of_week_display: boolean[]
+  tasker: {
+    id: number
+    user: User
+  }
+  contact: string
+  value: string
   description: string
+  duration: string
+  start_time: string
+  end_time: string
+  category: number
 }
 
-export type Tasker = TaskerAbridged & {
+export type Job = JobAbridged & {
   category: Category
 }
 
-export type GetTaskersRequest = {
+export type GetJobsRequest = {
   category?: string
   uf?: string
   city?: string
@@ -30,14 +37,14 @@ export type GetTaskersRequest = {
   offset?: string
 }
 
-export type GetTaskersResponse = {
+export type GetJobsResponse = {
   count: number
   next: string
   previous: string
-  results: TaskerAbridged[]
+  results: JobAbridged[]
 }
 
-export type GetTaskerDetailsResponse = Tasker
+export type GetJobDetailsResponse = Job
 
 export type StateAbbreviation =
   | 'AC'

@@ -13,8 +13,8 @@ import { z } from 'zod'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../@types/navigation'
 import { Picker } from '@react-native-picker/picker'
-import { cities, states } from '../modules/taskers/mock'
-import { StateAbbreviation } from '../modules/taskers/types'
+import { cities, states } from '../modules/jobs/mock'
+import { StateAbbreviation } from '../modules/jobs/types'
 import MaskInput from 'react-native-mask-input'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -45,8 +45,8 @@ export function Register() {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [isTasker, setIsTasker] = useState(false)
-  const toggleSwitch = () => setIsTasker((previousState) => !previousState)
+  const [isJob, setIsJob] = useState(false)
+  const toggleSwitch = () => setIsJob((previousState) => !previousState)
   const [selectedState, setSelectedState] = useState<
     StateAbbreviation | undefined
   >(undefined)
@@ -128,7 +128,7 @@ export function Register() {
         uf: String(selectedState),
         city: String(selectedCity),
         phone,
-        profile_type: isTasker ? 'T' : 'C',
+        profile_type: isJob ? 'T' : 'C',
       }
 
       await onRegister(body)
@@ -254,10 +254,10 @@ export function Register() {
         <View style={styles.profileTypeContainer}>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isTasker ? '#12229D' : '#f4f3f4'}
+            thumbColor={isJob ? '#12229D' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
-            value={isTasker}
+            value={isJob}
             style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
           />
           <Text style={styles.profileLabel}>Sou prestador de serviços</Text>

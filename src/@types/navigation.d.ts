@@ -3,8 +3,8 @@ export type RootStackParamList = {
   Register: undefined
   Tabs: undefined
   Home: undefined
-  TaskerDetails: { id: number }
-  TaskerList: undefined
+  JobDetails: { id: number }
+  JobList: undefined
 }
 
 export type RootTabsParamList = {

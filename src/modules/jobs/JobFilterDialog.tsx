@@ -11,9 +11,9 @@ import {
 import { StateAbbreviation } from './types'
 import { cities, states } from './mock'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useTaskerFilter } from './TaskerFilterContext'
+import { useJobFilter } from './JobFilterContext'
 
-export function TaskerFilterDialog() {
+export function JobFilterDialog() {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedState, setSelectedState] = useState<
     StateAbbreviation | undefined
@@ -21,7 +21,7 @@ export function TaskerFilterDialog() {
   const [selectedCity, setSelectedCity] = useState<string | undefined>(
     undefined,
   )
-  const { setSelectedLocation, clear } = useTaskerFilter()
+  const { setSelectedLocation, clear } = useJobFilter()
   const hasLocationFilter = selectedCity && selectedState
 
   const applyFilters = () => {

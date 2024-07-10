@@ -7,15 +7,15 @@ import {
 } from 'react-native'
 
 import { useCategories } from '../categories/store'
-import { SkeletonTaskerFilter } from './SkeletonTaskerFilter'
-import { useTaskerFilter } from './TaskerFilterContext'
+import { SkeletonJobFilter } from './SkeletonJobFilter'
+import { useJobFilter } from './JobFilterContext'
 
-export function TaskerFilter() {
+export function JobFilter() {
   const { data: categories, isLoading } = useCategories()
-  const { params, setSelectedCategory } = useTaskerFilter()
+  const { params, setSelectedCategory } = useJobFilter()
 
   if (isLoading) {
-    return <SkeletonTaskerFilter />
+    return <SkeletonJobFilter />
   }
 
   return (

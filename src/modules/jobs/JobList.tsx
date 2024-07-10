@@ -9,27 +9,27 @@ import {
   ActivityIndicator,
 } from 'react-native'
 
-import { useFormattedTaskers } from './stores'
+import { useFormattedJobs } from './stores'
 import { Skeleton } from './Skeleton'
-import { TaskerItem } from './TaskerItem'
-import { useTaskerFilter } from './TaskerFilterContext'
+import { JobItem } from './JobItem'
+import { useJobFilter } from './JobFilterContext'
 
-export function TaskerList() {
-  const { isFirstPage, setSelectedPage } = useTaskerFilter()
+export function JobList() {
+  const { isFirstPage, setSelectedPage } = useJobFilter()
   const {
-    data: taskers,
-    hasTaskers,
+    data: jobs,
+    hasJobs,
     limit,
     offset,
     isFetching,
     next,
-  } = useFormattedTaskers()
+  } = useFormattedJobs()
 
   if (isFetching && isFirstPage) {
-    return <SkeletonTaskerList />
+    return <SkeletonJobList />
   }
 
-  if (!hasTaskers) {
+  if (!hasJobs) {
     return (
       <View style={styles.emptyStateContainer}>
         <Text style={styles.emptyStateText}>
@@ -42,17 +42,17 @@ export function TaskerList() {
   return (
     <SafeAreaView style={styles.scroll}>
       <FlatList
-        data={taskers}
+        data={jobs}
         renderItem={({ item }) => (
           <View style={{ marginVertical: 10 }}>
-            <TaskerItem
+            <JobItem
               id={item.id}
               key={item.id}
-              name={item.user.name}
+              name={item.tasker.user.name}
               description={item.description}
               rateQuantity={5.0}
               rateValue={24}
-              valueBRL={item.hourly_rate}
+              valueBRL={Number(item.value)}
             />
           </View>
         )}
@@ -77,19 +77,19 @@ function Loading({ loading }: { loading: boolean }) {
   return null
 }
 
-function SkeletonTasker() {
+function SkeletonJob() {
   return <Skeleton width={'100%'} height={130} />
 }
 
-function SkeletonTaskerList() {
+function SkeletonJobList() {
   return (
     <ScrollView style={styles.scroll}>
       <View style={{ flex: 1, paddingHorizontal: 16, gap: 20, marginTop: 10 }}>
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
-        <SkeletonTasker />
+        <SkeletonJob />
+        <SkeletonJob />
+        <SkeletonJob />
+        <SkeletonJob />
+        <SkeletonJob />
       </View>
     </ScrollView>
   )
