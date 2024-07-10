@@ -9,9 +9,19 @@ import * as SecureStore from 'expo-secure-store'
 
 import { client } from '../client'
 
+type onRegisterParams = {
+  email: string
+  password: string
+  name: string
+  uf: string
+  city: string
+  phone: string
+  profile_type: string
+}
+
 interface AuthProps {
   authState: { token: string | null; authenticated: boolean | null }
-  onRegister: (email: string, password: string) => Promise<any>
+  onRegister: (params: onRegisterParams) => Promise<any>
   onLogin: (email: string, password: string) => Promise<any>
   onLogout: () => Promise<any>
 }
@@ -51,9 +61,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loadToken()
   }, [])
 
-  const register = async (email: string, password: string) => {
+  const register = async (params: onRegisterParams) => {
     try {
-      return await client.post(`/users/`, { email, password })
+      return await client.post(`/users/`, { ...params })
     } catch (e) {
       return { error: true, msg: (e as any).response.data.msg }
     }

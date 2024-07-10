@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   View,
   TextInput,
@@ -16,6 +16,7 @@ import { Picker } from '@react-native-picker/picker'
 import { cities, states } from '../modules/taskers/mock'
 import { StateAbbreviation } from '../modules/taskers/types'
 import MaskInput from 'react-native-mask-input'
+import { useAuth } from '../contexts/AuthContext'
 
 const emailSchema = z.string().email({ message: 'Email inválido' })
 const passwordSchema = z
@@ -32,6 +33,13 @@ const passwordSchema = z
     message: 'A senha deve conter pelo menos um caractere especial',
   })
 
+const nameSchema = z.string().min(1, { message: 'Nome inválido' })
+const phoneSchema = z.string().regex(/^\(\d{2}\) \d{5}-\d{4}$/, {
+  message: 'Telefone inválido, use o formato (99) 99999-9999',
+})
+const stateSchema = z.string().min(1, { message: 'Selecione um estado' })
+const citySchema = z.string().min(1, { message: 'Selecione uma cidade' })
+
 export function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -45,16 +53,29 @@ export function Register() {
   const [selectedCity, setSelectedCity] = useState<string | undefined>(
     undefined,
   )
-
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [nameError, setNameError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+  const [stateError, setStateError] = useState('')
+  const [cityError, setCityError] = useState('')
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const { onRegister } = useAuth()
 
   const handleRegister = async () => {
     const emailValidation = emailSchema.safeParse(email)
     const passwordValidation = passwordSchema.safeParse(password)
+    const nameValidation = nameSchema.safeParse(name)
+    const phoneValidation = phoneSchema.safeParse(phone)
+    const stateValidation = stateSchema.safeParse(selectedState)
+    const cityValidation = citySchema.safeParse(selectedCity)
+
     const hasEmailError = !emailValidation.success
     const hasPasswordError = !passwordValidation.success
+    const hasNameError = !nameValidation.success
+    const hasPhoneError = !phoneValidation.success
+    const hasStateError = !stateValidation.success
+    const hasCityError = !cityValidation.success
 
     if (hasEmailError) {
       setEmailError(emailValidation.error.errors[0].message)
@@ -68,19 +89,51 @@ export function Register() {
       setPasswordError('')
     }
 
-    if (!hasEmailError && !hasPasswordError) {
-      // Aqui você enviaria os dados para o backend
+    if (hasNameError) {
+      setNameError(nameValidation.error.errors[0].message)
+    } else {
+      setNameError('')
+    }
+
+    if (hasPhoneError) {
+      setPhoneError(phoneValidation.error.errors[0].message)
+    } else {
+      setPhoneError('')
+    }
+
+    if (hasStateError) {
+      setStateError(stateValidation.error.errors[0].message)
+    } else {
+      setStateError('')
+    }
+
+    if (hasCityError) {
+      setCityError(cityValidation.error.errors[0].message)
+    } else {
+      setCityError('')
+    }
+
+    if (
+      !hasEmailError &&
+      !hasPasswordError &&
+      !hasNameError &&
+      !hasPhoneError &&
+      !hasStateError &&
+      !hasCityError
+    ) {
       const body = {
         email,
         password,
         name,
-        uf: selectedState,
-        city: selectedCity,
+        uf: String(selectedState),
+        city: String(selectedCity),
         phone,
         profile_type: isTasker ? 'T' : 'C',
       }
 
-      console.log('Dados enviados:', body)
+      await onRegister(body)
+
+      navigation.navigate('Login')
     }
   }
 
@@ -113,6 +166,7 @@ export function Register() {
             placeholder="Digite seu nome"
             autoCapitalize="words"
           />
+          {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Telefone</Text>
@@ -140,6 +194,9 @@ export function Register() {
               /\d/,
             ]}
           />
+          {phoneError ? (
+            <Text style={styles.errorText}>{phoneError}</Text>
+          ) : null}
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Senha</Text>
@@ -174,6 +231,9 @@ export function Register() {
               />
             ))}
           </Picker>
+          {stateError ? (
+            <Text style={styles.errorText}>{stateError}</Text>
+          ) : null}
         </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Cidade</Text>
@@ -189,6 +249,7 @@ export function Register() {
                 <Picker.Item key={city} label={city} value={city} />
               ))}
           </Picker>
+          {cityError ? <Text style={styles.errorText}>{cityError}</Text> : null}
         </View>
         <View style={styles.profileTypeContainer}>
           <Switch
