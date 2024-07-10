@@ -22,17 +22,16 @@ export function JobFilterDialog() {
     undefined,
   )
   const { setSelectedLocation, clear } = useJobFilter()
-  const hasLocationFilter = selectedCity && selectedState
 
   const applyFilters = () => {
-    if (hasLocationFilter) {
+    if (selectedState) {
       setSelectedLocation(selectedState, selectedCity)
     }
     setModalVisible(false)
   }
 
   const clearFilters = () => {
-    if (hasLocationFilter) {
+    if (selectedState) {
       clear()
       setSelectedState(undefined)
       setSelectedCity(undefined)
