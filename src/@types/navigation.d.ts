@@ -10,4 +10,5 @@ export type RootStackParamList = {
 export type RootTabsParamList = {
   Profile: undefined
   Home: undefined
+  CreateJob: undefined
 }

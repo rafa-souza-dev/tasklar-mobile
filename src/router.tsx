@@ -12,6 +12,7 @@ import { Home } from './screens/Home'
 import { JobFilterDialog } from './modules/jobs/JobFilterDialog'
 import { JobFilterProvider } from './modules/jobs/JobFilterContext'
 import { JobDetails } from './screens/JobDetails'
+import { CreateJob } from './screens/CreateJob'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -61,6 +62,19 @@ function BottomTabs() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../assets/home-white.png')}
+              style={{ tintColor: tintColor(focused) }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="CreateJob"
+        component={CreateJob}
+        options={{
+          title: 'Crie seu serviço',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../assets/add-job-icon.png')}
               style={{ tintColor: tintColor(focused) }}
             />
           ),
