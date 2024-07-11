@@ -44,6 +44,18 @@ export type GetJobsResponse = {
   results: JobAbridged[]
 }
 
+export type PostJobRequest = {
+  days_of_week: boolean[]
+  contact: string
+  value: number
+  description: string
+  duration: string
+  start_time: string
+  end_time: string
+  tasker: number
+  category: number
+}
+
 export type GetJobDetailsResponse = Job
 
 export type StateAbbreviation =

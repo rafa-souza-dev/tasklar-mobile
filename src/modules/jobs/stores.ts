@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
-import { getJob, getJobs } from './client'
+import { getJob, getJobs, postJob } from './client'
 import { GetJobsRequest, JobAbridged } from './types'
 import { useJobFilter } from './JobFilterContext'
 
@@ -18,6 +18,12 @@ export function useJob(jobId: number) {
     queryKey: ['job', jobId],
     queryFn: () => getJob(jobId),
     enabled: Boolean(jobId),
+  })
+}
+
+export function useCreateJob() {
+  return useMutation({
+    mutationFn: postJob,
   })
 }
 
