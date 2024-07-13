@@ -1,3 +1,5 @@
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
 type DayOfMonthProps = {
@@ -9,12 +11,18 @@ type DayOfMonthProps = {
 
 export function DayOfMonth(props: DayOfMonthProps) {
   const style = getStyle(props.isActive, props.isDisabled)
+  const formattedDay = format(props.date, 'E', {
+    locale: ptBR,
+  })
+  const formattedDate = format(props.date, 'dd/MM')
+  const captalizeDay =
+    formattedDay.slice(0, 1).toUpperCase() + formattedDay.slice(1)
 
   return (
     <TouchableOpacity onPress={props.onPress}>
       <View style={style.container}>
-        <Text style={style.dayText}>Domingo</Text>
-        <Text style={style.dayOfMonth}>22/06</Text>
+        <Text style={style.dayText}>{captalizeDay}</Text>
+        <Text style={style.dayOfMonth}>{formattedDate}</Text>
       </View>
     </TouchableOpacity>
   )
