@@ -11,6 +11,7 @@ import { Profile } from './src/screens/Profile'
 import { RootStackParamList, RootTabsParamList } from './src/@types/navigation'
 import { TaskerDetails } from './src/screens/TaskerDetails'
 import { Register } from './src/screens/Register'
+import { ReviewScreen } from './src/screens/ReviewScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -93,6 +94,11 @@ function TaskerStack() {
         name="TaskerDetails"
         component={TaskerDetails}
         options={{ title: 'Detalhes do Prestador' }}
+      />
+      <Stack.Screen
+        name="ReviewScreen"
+        component={ReviewScreen}
+        options={{ title: 'Avaliar Serviços' }}
       />
     </Stack.Navigator>
   )

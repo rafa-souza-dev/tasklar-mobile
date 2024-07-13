@@ -26,7 +26,11 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "^15.3.0",
     "react-native-ui-lib": "^7.25.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "react-native-web": "~0.19.10",
+    "react-dom": "18.2.0",
+    "@expo/metro-runtime": "~3.2.1",
+    "expo-linking": "~6.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

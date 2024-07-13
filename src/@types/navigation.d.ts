@@ -5,6 +5,8 @@ export type RootStackParamList = {
   Home: undefined
   TaskerDetails: { id: number }
   TaskerList: undefined
+  ReviewScreen: undefined;
+  Profile: undefined;
 }
 
 export type RootTabsParamList = {
