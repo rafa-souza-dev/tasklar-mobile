@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { addDays, isSameDay } from 'date-fns'
+import { addDays, addWeeks, isSameDay } from 'date-fns'
 import { useState } from 'react'
 
 import { RootStackParamList } from '../@types/navigation'
@@ -14,16 +14,26 @@ type JobContractProps = {
 }
 
 export function JobContract(props: JobContractProps) {
-  const currentDate = addDays(new Date(), -3)
+  const currentDate = new Date(addDays(new Date().toDateString(), -3))
   const [selectedDate, setSelectedDate] = useState<Date>(currentDate)
-  const week = generateWeekOfDay(currentDate)
-  const isInCurrentWeek = week.some((date) => isSameDay(date, currentDate))
+  const [selectedWeek, setSelectedWeek] = useState<Date[]>(
+    generateWeekOfDay(currentDate),
+  )
+  const isInCurrentWeek = selectedWeek.some((date) =>
+    isSameDay(date, currentDate),
+  )
+
+  function handleUpdateWeek(weeks: number) {
+    setSelectedWeek((prevState) =>
+      generateWeekOfDay(addWeeks(prevState[0], weeks)),
+    )
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Horários do Prestador</Text>
       <View style={styles.weekContainer}>
-        {week.map((date, index) => (
+        {selectedWeek.map((date, index) => (
           <DayOfMonth
             key={String(index)}
             date={date}
@@ -43,6 +53,9 @@ export function JobContract(props: JobContractProps) {
               : styles.paginationButton
           }
           disabled={isInCurrentWeek}
+          onPress={() => {
+            handleUpdateWeek(-1)
+          }}
         >
           <Text
             style={
@@ -54,7 +67,12 @@ export function JobContract(props: JobContractProps) {
             Semana anterior
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.paginationButton}>
+        <TouchableOpacity
+          style={styles.paginationButton}
+          onPress={() => {
+            handleUpdateWeek(1)
+          }}
+        >
           <Text style={styles.paginationText}>Próxima semana</Text>
         </TouchableOpacity>
       </View>
