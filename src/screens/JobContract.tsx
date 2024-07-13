@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { addDays, addWeeks, isSameDay } from 'date-fns'
+import { addDays, addWeeks, differenceInDays, isSameDay } from 'date-fns'
 import { useState } from 'react'
 
 import { RootStackParamList } from '../@types/navigation'
@@ -22,6 +22,11 @@ export function JobContract(props: JobContractProps) {
   const isInCurrentWeek = selectedWeek.some((date) =>
     isSameDay(date, currentDate),
   )
+  const hasNextWeekInNext30Days =
+    differenceInDays(
+      generateWeekOfDay(addWeeks(selectedWeek[0], 1))[0],
+      currentDate,
+    ) >= 30
 
   function handleUpdateWeek(weeks: number) {
     setSelectedWeek((prevState) =>
@@ -68,12 +73,25 @@ export function JobContract(props: JobContractProps) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.paginationButton}
+          style={
+            hasNextWeekInNext30Days
+              ? styles.paginationButtonDisabled
+              : styles.paginationButton
+          }
           onPress={() => {
             handleUpdateWeek(1)
           }}
+          disabled={hasNextWeekInNext30Days}
         >
-          <Text style={styles.paginationText}>Próxima semana</Text>
+          <Text
+            style={
+              hasNextWeekInNext30Days
+                ? styles.paginationTextDisabled
+                : styles.paginationText
+            }
+          >
+            Próxima semana
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
