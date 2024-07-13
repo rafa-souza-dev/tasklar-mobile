@@ -14,7 +14,7 @@ type JobContractProps = {
 }
 
 export function JobContract(props: JobContractProps) {
-  const currentDate = new Date(addDays(new Date().toDateString(), -3))
+  const currentDate = new Date(new Date().toDateString())
   const [selectedDate, setSelectedDate] = useState<Date>(currentDate)
   const [selectedWeek, setSelectedWeek] = useState<Date[]>(
     generateWeekOfDay(currentDate),
