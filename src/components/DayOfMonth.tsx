@@ -19,7 +19,7 @@ export function DayOfMonth(props: DayOfMonthProps) {
     formattedDay.slice(0, 1).toUpperCase() + formattedDay.slice(1)
 
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress} disabled={props.isDisabled}>
       <View style={style.container}>
         <Text style={style.dayText}>{captalizeDay}</Text>
         <Text style={style.dayOfMonth}>{formattedDate}</Text>
@@ -72,9 +72,9 @@ const stylesDisabled = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#CDCDCD',
     borderWidth: 1,
-    width: 90,
+    width: 85,
     borderRadius: 8,
-    padding: 8,
+    padding: 4,
   },
   dayText: {
     fontSize: 16,
@@ -97,9 +97,9 @@ const stylesActive = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#12229D',
     borderWidth: 1,
-    width: 90,
+    width: 85,
     borderRadius: 8,
-    padding: 6,
+    padding: 4,
     backgroundColor: '#abb3f1',
   },
   dayText: {
