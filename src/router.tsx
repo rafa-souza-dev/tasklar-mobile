@@ -14,6 +14,8 @@ import { JobFilterProvider } from './modules/jobs/JobFilterContext'
 import { JobDetails } from './screens/JobDetails'
 import { CreateJob } from './screens/CreateJob'
 import { JobContract } from './screens/JobContract'
+import { useWhoami } from './modules/users/stores'
+import { Loading } from './components/Loading'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -45,6 +47,12 @@ export function Router() {
 }
 
 function BottomTabs() {
+  const { data: user, isLoading } = useWhoami()
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -68,23 +76,26 @@ function BottomTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="CreateJob"
-        component={CreateJob}
-        options={{
-          title: 'Crie seu serviço',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('../assets/add-job-icon.png')}
-              style={{ tintColor: tintColor(focused) }}
-            />
-          ),
-        }}
-      />
+      {user?.profile_type === 'T' && (
+        <Tab.Screen
+          name="CreateJob"
+          component={CreateJob}
+          options={{
+            title: 'Crie seu serviço',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/add-job-icon.png')}
+                style={{ tintColor: tintColor(focused) }}
+              />
+            ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
+          headerTitle: 'Meu Perfil',
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../assets/profile-white.png')}
