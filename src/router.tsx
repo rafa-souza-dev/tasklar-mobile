@@ -13,6 +13,7 @@ import { JobFilterDialog } from './modules/jobs/JobFilterDialog'
 import { JobFilterProvider } from './modules/jobs/JobFilterContext'
 import { JobDetails } from './screens/JobDetails'
 import { CreateJob } from './screens/CreateJob'
+import { JobContract } from './screens/JobContract'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -116,6 +117,11 @@ function JobStack() {
           name="JobDetails"
           component={JobDetails}
           options={{ title: 'Detalhes do Prestador' }}
+        />
+        <Stack.Screen
+          name="JobContract"
+          component={JobContract}
+          options={{ title: 'Contrate o Prestador' }}
         />
       </Stack.Navigator>
     </JobFilterProvider>

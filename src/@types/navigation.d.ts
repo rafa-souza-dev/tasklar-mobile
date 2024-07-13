@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Home: undefined
   JobDetails: { id: number }
   JobList: undefined
+  JobContract: { id: number }
 }
 
 export type RootTabsParamList = {

@@ -1,5 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { RouteProp } from '@react-navigation/native'
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native'
 import {
   StyleSheet,
   Text,
@@ -21,6 +25,7 @@ type JobDetailsProps = {
 export function JobDetails(props: JobDetailsProps) {
   const id = props.route.params.id
   const { data: job, formattedHourlyRate } = useFormattedJob(id)
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   return (
     <View style={styles.container}>
@@ -64,7 +69,12 @@ export function JobDetails(props: JobDetailsProps) {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate('JobContract', { id })
+          }}
+        >
           <Text style={styles.label}>Contratar</Text>
         </TouchableOpacity>
       </View>
