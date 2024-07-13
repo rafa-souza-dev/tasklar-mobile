@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import { RootStackParamList } from '../@types/navigation'
 import { DayOfMonth } from '../components/DayOfMonth'
+import { useState } from 'react'
+import { generateWeekOfDay } from '../utils/date'
+import { addDays, isSameDay } from 'date-fns'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -11,14 +14,26 @@ type JobContractProps = {
 }
 
 export function JobContract(props: JobContractProps) {
+  const currentDate = addDays(new Date(), -3)
+  const [selectedDate, setSelectedDate] = useState<Date>(currentDate)
+  const week = generateWeekOfDay(currentDate)
+
   return (
     <>
       <View>
         <Text>{props.route.params.id}</Text>
       </View>
       <View style={styles.weekContainer}>
-        {Array.from({ length: 7 }).map((_, index) => (
-          <DayOfMonth key={String(index)} date={new Date()} />
+        {week.map((date, index) => (
+          <DayOfMonth
+            key={String(index)}
+            date={date}
+            isActive={isSameDay(date, selectedDate)}
+            isDisabled={date < currentDate}
+            onPress={() => {
+              setSelectedDate(date)
+            }}
+          />
         ))}
       </View>
     </>

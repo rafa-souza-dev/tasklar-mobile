@@ -19,7 +19,10 @@ export function DayOfMonth(props: DayOfMonthProps) {
     formattedDay.slice(0, 1).toUpperCase() + formattedDay.slice(1)
 
   return (
-    <TouchableOpacity onPress={props.onPress} disabled={props.isDisabled}>
+    <TouchableOpacity
+      onPress={props.onPress}
+      disabled={props.isDisabled || props.isActive}
+    >
       <View style={style.container}>
         <Text style={style.dayText}>{captalizeDay}</Text>
         <Text style={style.dayOfMonth}>{formattedDate}</Text>
