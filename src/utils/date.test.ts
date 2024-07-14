@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { getDay, addWeeks, differenceInDays, differenceInWeeks } from 'date-fns'
 
-import { generateWeekOfDay, sumTime } from './date'
+import { generateWeekOfDay, isTimeBiggerThan, sumTime } from './date'
 
 describe('generateWeekOfDay()', () => {
   describe('with current date', () => {
@@ -76,6 +76,93 @@ describe('sumTime()', () => {
       it('should be able to sum time with duration', () => {
         expect(sumTime(time, duration)).toBe('13:15')
       })
+    })
+  })
+})
+
+describe('isTimeBiggerThan()', () => {
+  describe('when left and right time have no minutes', () => {
+    const leftTime = '12:00'
+    const rightTime = '11:00'
+
+    it('should return true', () => {
+      expect(isTimeBiggerThan(leftTime, rightTime)).toBe(true)
+    })
+  })
+
+  describe('when left and right time have minutes', () => {
+    const leftTime = '12:30'
+    const rightTime = '11:15'
+
+    it('should return true', () => {
+      expect(isTimeBiggerThan(leftTime, rightTime)).toBe(true)
+    })
+  })
+
+  describe('when left and right have equal hours', () => {
+    describe('when left time is less than right', () => {
+      const leftTime = '11:10'
+      const rightTime = '11:15'
+
+      it('should return false', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+      })
+    })
+
+    describe('when left time is bigger than right', () => {
+      const leftTime = '11:30'
+      const rightTime = '11:15'
+
+      it('should return true', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(true)
+      })
+    })
+  })
+
+  describe('when the left time is less than right', () => {
+    describe('without minutes', () => {
+      const leftTime = '8:00'
+      const rightTime = '11:00'
+
+      it('should return false', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+      })
+    })
+
+    describe('with minutes only in left', () => {
+      const leftTime = '8:30'
+      const rightTime = '11:00'
+
+      it('should return false', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+      })
+    })
+
+    describe('with minutes only in right', () => {
+      const leftTime = '8:00'
+      const rightTime = '11:30'
+
+      it('should return false', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+      })
+    })
+
+    describe('with minutes in both sides', () => {
+      const leftTime = '8:50'
+      const rightTime = '11:30'
+
+      it('should return false', () => {
+        expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+      })
+    })
+  })
+
+  describe('when the times are equals', () => {
+    const leftTime = '8:00'
+    const rightTime = '8:00'
+
+    it('should return false', () => {
+      expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
     })
   })
 })

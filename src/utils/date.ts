@@ -51,3 +51,22 @@ function convertTime(time: number): string {
 
   return String(time)
 }
+
+export function isTimeBiggerThan(timeLeft: string, timeRight: string): boolean {
+  const splitTimeLeft = timeLeft.split(':')
+  const splitTimeRight = timeRight.split(':')
+  const leftTimeHours = splitTimeLeft[0]
+  const rightTimeHours = splitTimeRight[0]
+  const leftTimeMinutes = splitTimeLeft[1]
+  const rightTimeMinutes = splitTimeRight[1]
+
+  if (Number(leftTimeHours) > Number(rightTimeHours)) {
+    return true
+  }
+
+  if (Number(leftTimeHours) === Number(rightTimeHours)) {
+    return leftTimeMinutes > rightTimeMinutes
+  }
+
+  return false
+}
