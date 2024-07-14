@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { getDay, addWeeks, differenceInDays, differenceInWeeks } from 'date-fns'
 
-import { generateWeekOfDay, isTimeBiggerThan, sumTime } from './date'
+import {
+  generateWeekOfDay,
+  getTimesInInterval,
+  isTimeBiggerThan,
+  sumTime,
+} from './date'
 
 describe('generateWeekOfDay()', () => {
   describe('with current date', () => {
@@ -163,6 +168,46 @@ describe('isTimeBiggerThan()', () => {
 
     it('should return false', () => {
       expect(isTimeBiggerThan(leftTime, rightTime)).toBe(false)
+    })
+  })
+})
+
+describe('getTimesInInterval()', () => {
+  describe('when end time is less than start time', () => {
+    const startTime = '11:00'
+    const endTime = '8:00'
+    const duration = '1hr30min'
+
+    it('should return empty times list', () => {
+      expect(getTimesInInterval({ startTime, endTime, duration })).toHaveLength(
+        0,
+      )
+    })
+  })
+
+  describe('when end time is less than start time', () => {
+    describe('when not have minutes', () => {
+      const startTime = '8:00'
+      const endTime = '11:00'
+      const duration = '1hr00min'
+
+      it('should return 3 times', () => {
+        expect(
+          getTimesInInterval({ startTime, endTime, duration }),
+        ).toHaveLength(3)
+      })
+    })
+
+    describe('when have minutes', () => {
+      const startTime = '8:00'
+      const endTime = '12:00'
+      const duration = '1hr30min'
+
+      it('should return 3 times', () => {
+        expect(
+          getTimesInInterval({ startTime, endTime, duration }),
+        ).toHaveLength(3)
+      })
     })
   })
 })

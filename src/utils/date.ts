@@ -17,11 +17,44 @@ export function generateWeekOfDay(date: Date): Date[] {
   return week
 }
 
-export function getTimesInInterval(
-  startTime: string,
-  endTime: string,
-  duration: string,
-) {}
+type GetTimesInIntervalParams = {
+  startTime: string
+  endTime: string
+  duration: string
+}
+
+export function getTimesInInterval(params: GetTimesInIntervalParams): string[] {
+  const formattedStartTime = formatTime(params.startTime)
+  const formattedEndTime = formatTime(params.endTime)
+  const times: string[] = []
+
+  if (isTimeBiggerThan(formattedStartTime, formattedEndTime)) {
+    return []
+  }
+
+  times.push(formattedStartTime)
+
+  let nextTime = sumTime(times[times.length - 1], params.duration)
+
+  while (
+    !isTimeBiggerThan(nextTime, formattedEndTime) &&
+    nextTime !== formattedEndTime
+  ) {
+    times.push(nextTime)
+
+    nextTime = sumTime(times[times.length - 1], params.duration)
+  }
+
+  return times
+}
+
+function formatTime(time: string) {
+  if (time.length === 5) {
+    return time
+  }
+
+  return time.slice(0, 5)
+}
 
 export function sumTime(time: string, duration: string): string {
   const splitTime = time.split(':')
