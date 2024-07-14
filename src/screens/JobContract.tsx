@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { addWeeks, differenceInDays, isSameDay } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RootStackParamList } from '../@types/navigation'
 
 import { DayOfMonth } from '../components/DayOfMonth'
@@ -69,6 +69,10 @@ export function JobContract(props: JobContractProps) {
       generateWeekOfDay(addWeeks(prevState[0], weeks)),
     )
   }
+
+  useEffect(() => {
+    setSelectedTime(null)
+  }, [selectedDate])
 
   return (
     <View style={styles.container}>
