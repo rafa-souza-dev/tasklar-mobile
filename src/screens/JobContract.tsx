@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { RootStackParamList } from '../@types/navigation'
 import { DayOfMonth } from '../components/DayOfMonth'
 import { generateWeekOfDay } from '../utils/date'
+import { ScheduleTime } from '../components/ScheduleTime'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -37,6 +38,7 @@ export function JobContract(props: JobContractProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Horários do Prestador</Text>
+
       <View style={styles.weekContainer}>
         {selectedWeek.map((date, index) => (
           <DayOfMonth
@@ -50,6 +52,7 @@ export function JobContract(props: JobContractProps) {
           />
         ))}
       </View>
+
       <View style={styles.pagination}>
         <TouchableOpacity
           style={
@@ -94,6 +97,12 @@ export function JobContract(props: JobContractProps) {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.scheduleContainer}>
+        {Array.from({ length: 23 }).map((_, index) => (
+          <ScheduleTime key={index} time="11:00" />
+        ))}
+      </View>
     </View>
   )
 }
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
   pagination: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 10,
+    marginVertical: 10,
   },
   paginationText: {
     fontSize: 16,
@@ -141,5 +150,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#CDCDCD',
     padding: 10,
     borderRadius: 40,
+  },
+  scheduleContainer: {
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    width: '100%',
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
