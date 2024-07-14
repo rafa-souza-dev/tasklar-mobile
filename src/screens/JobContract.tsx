@@ -1,5 +1,11 @@
 import { RouteProp } from '@react-navigation/native'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import { addWeeks, differenceInDays, isSameDay, setDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { RootStackParamList } from '../@types/navigation'
@@ -51,6 +57,7 @@ function getFirstServiceDayIndex(days: boolean[]): number {
 }
 
 export function JobContract(props: JobContractProps) {
+  const [value, onChangeText] = useState('Useless Multiline Placeholder')
   const currentDate = new Date()
   const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`
   const foundFirstJobDay = getFirstServiceDayIndex(mockJob.days_of_week_display)
@@ -166,6 +173,37 @@ export function JobContract(props: JobContractProps) {
           />
         ))}
       </View>
+
+      <View>
+        <Text style={{ fontSize: 16 }}>Descreva sua necessidade</Text>
+        <View
+          style={{
+            backgroundColor: 'transparent',
+            borderColor: '#000000',
+            borderWidth: 1,
+            height: 100,
+            borderRadius: 8,
+            marginTop: 10,
+          }}
+        >
+          <TextInput
+            multiline
+            numberOfLines={5}
+            maxLength={500}
+            onChangeText={(text) => onChangeText(text)}
+            value={value}
+            style={{
+              padding: 10,
+              alignItems: 'flex-end',
+              textAlignVertical: 'top',
+            }}
+          />
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.paginationButton}>
+        <Text style={styles.paginationText}>Contratar</Text>
+      </TouchableOpacity>
     </View>
   )
 }
