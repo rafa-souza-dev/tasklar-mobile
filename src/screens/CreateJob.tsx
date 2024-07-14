@@ -235,11 +235,14 @@ export function CreateJob() {
             onValueChange={(itemValue) => setDuration(itemValue as string)}
             style={styles.picker}
           >
-            <Picker.Item label="30 minutos" value="30min" />
-            <Picker.Item label="1 hora" value="1hr" />
-            <Picker.Item label="2 horas" value="2hr" />
-            <Picker.Item label="3 horas" value="3hr" />
-            <Picker.Item label="4 horas" value="4hr" />
+            <Picker.Item label="30 minutos" value="0hr30min" />
+            <Picker.Item label="1 hora" value="1hr00min" />
+            <Picker.Item label="1 hora e 30 minutos" value="1hr30min" />
+            <Picker.Item label="2 horas" value="2hr00min" />
+            <Picker.Item label="2 horas e 30 minutos" value="2hr30min" />
+            <Picker.Item label="3 horas" value="3hr00min" />
+            <Picker.Item label="3 horas e 30 minutos" value="3hr30min" />
+            <Picker.Item label="4 horas" value="4hr00min" />
           </Picker>
         </View>
         <View style={styles.inputGroup}>
