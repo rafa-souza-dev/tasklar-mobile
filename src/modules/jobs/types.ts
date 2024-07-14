@@ -17,12 +17,11 @@ export type JobAbridged = {
     user: User
   }
   contact: string
-  value: string
+  value: number
   description: string
   duration: string
   start_time: string
   end_time: string
-  category: number
 }
 
 export type Job = JobAbridged & {

@@ -1,12 +1,17 @@
 import { RouteProp } from '@react-navigation/native'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { addDays, addWeeks, differenceInDays, isSameDay } from 'date-fns'
+import { addWeeks, differenceInDays, isSameDay } from 'date-fns'
 import { useState } from 'react'
-
 import { RootStackParamList } from '../@types/navigation'
+
 import { DayOfMonth } from '../components/DayOfMonth'
-import { generateWeekOfDay } from '../utils/date'
+import {
+  generateWeekOfDay,
+  getTimesInInterval,
+  isTimeBiggerThan,
+} from '../utils/date'
 import { ScheduleTime } from '../components/ScheduleTime'
+import { Job } from '../modules/jobs/types'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -14,20 +19,50 @@ type JobContractProps = {
   route: ContractScreenRouteProp
 }
 
+const mockJob: Job = {
+  category: {
+    id: 1,
+    name: 'faxina',
+  },
+  contact: '1',
+  days_of_week_display: [false, false, true, true, true, false, true],
+  description: 'teste',
+  duration: '1hr30min',
+  start_time: '06:00:00',
+  end_time: '23:30:00',
+  id: 1,
+  tasker: {
+    id: 1,
+    user: {
+      name: 'a',
+    },
+  },
+  value: 100,
+} as const
+
 export function JobContract(props: JobContractProps) {
-  const currentDate = new Date(new Date().toDateString())
-  const [selectedDate, setSelectedDate] = useState<Date>(currentDate)
+  const currentDate = new Date()
+  const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`
+  const currentFormattedDate = new Date(new Date().toDateString())
+  const [selectedDate, setSelectedDate] = useState<Date>(currentFormattedDate)
   const [selectedWeek, setSelectedWeek] = useState<Date[]>(
-    generateWeekOfDay(currentDate),
+    generateWeekOfDay(currentFormattedDate),
   )
+  const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const isInCurrentWeek = selectedWeek.some((date) =>
-    isSameDay(date, currentDate),
+    isSameDay(date, currentFormattedDate),
   )
   const hasNextWeekInNext30Days =
     differenceInDays(
       generateWeekOfDay(addWeeks(selectedWeek[0], 1))[0],
-      currentDate,
+      currentFormattedDate,
     ) >= 30
+  const times = getTimesInInterval({
+    startTime: mockJob.start_time,
+    endTime: mockJob.end_time,
+    duration: mockJob.duration,
+  })
+  const isInCurrentDay = isSameDay(currentFormattedDate, selectedDate)
 
   function handleUpdateWeek(weeks: number) {
     setSelectedWeek((prevState) =>
@@ -45,7 +80,7 @@ export function JobContract(props: JobContractProps) {
             key={String(index)}
             date={date}
             isActive={isSameDay(date, selectedDate)}
-            isDisabled={date < currentDate}
+            isDisabled={date < currentFormattedDate}
             onPress={() => {
               setSelectedDate(date)
             }}
@@ -99,8 +134,16 @@ export function JobContract(props: JobContractProps) {
       </View>
 
       <View style={styles.scheduleContainer}>
-        {Array.from({ length: 23 }).map((_, index) => (
-          <ScheduleTime key={index} time="11:00" />
+        {times.map((time, index) => (
+          <ScheduleTime
+            key={index}
+            time={time}
+            isDisabled={isInCurrentDay && isTimeBiggerThan(currentTime, time)}
+            isActive={selectedTime === time}
+            onPress={() => {
+              setSelectedTime(time)
+            }}
+          />
         ))}
       </View>
     </View>
