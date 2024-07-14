@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { addWeeks, differenceInDays, isSameDay } from 'date-fns'
+import { addWeeks, differenceInDays, isSameDay, setDay } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { RootStackParamList } from '../@types/navigation'
 
@@ -40,11 +40,24 @@ const mockJob: Job = {
   value: 100,
 } as const
 
+function getFirstServiceDayIndex(days: boolean[]): number {
+  for (let i = 0; i < days.length; i++) {
+    if (days[i] === true) {
+      return i
+    }
+  }
+
+  return 0
+}
+
 export function JobContract(props: JobContractProps) {
   const currentDate = new Date()
   const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`
+  const foundFirstJobDay = getFirstServiceDayIndex(mockJob.days_of_week_display)
   const currentFormattedDate = new Date(new Date().toDateString())
-  const [selectedDate, setSelectedDate] = useState<Date>(currentFormattedDate)
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    setDay(currentFormattedDate, foundFirstJobDay),
+  )
   const [selectedWeek, setSelectedWeek] = useState<Date[]>(
     generateWeekOfDay(currentFormattedDate),
   )
@@ -84,7 +97,10 @@ export function JobContract(props: JobContractProps) {
             key={String(index)}
             date={date}
             isActive={isSameDay(date, selectedDate)}
-            isDisabled={date < currentFormattedDate}
+            isDisabled={
+              date < currentFormattedDate ||
+              mockJob.days_of_week_display[index] === false
+            }
             onPress={() => {
               setSelectedDate(date)
             }}
