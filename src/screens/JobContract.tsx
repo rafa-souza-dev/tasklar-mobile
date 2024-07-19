@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -15,6 +16,7 @@ import { generateWeekOfDay } from '../utils/date'
 import { useFormattedJob } from '../modules/jobs/stores'
 import { JobTimes } from '../modules/jobs/JobTimes'
 import { useServicesByJob } from '../modules/services/stores'
+import { Loading } from '../components/Loading'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -24,8 +26,9 @@ type JobContractProps = {
 
 export function JobContract(props: JobContractProps) {
   const jobId = props.route.params.id
-  const { data: job, times } = useFormattedJob(jobId)
-  const [value, onChangeText] = useState('Useless Multiline Placeholder')
+  const { data: job, times, isLoading } = useFormattedJob(jobId)
+  const [descriptionNeed, setDescriptionNeed] = useState('')
+  const [neighborhood, setNeighborhood] = useState('')
   const currentDate = new Date()
   const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`
   const currentFormattedDate = new Date(new Date().toDateString())
@@ -52,6 +55,8 @@ export function JobContract(props: JobContractProps) {
   const isInCurrentDay = Boolean(
     selectedDate && isSameDay(currentFormattedDate, selectedDate),
   )
+  const isNotFormComplete =
+    !selectedDate || !selectedTime || !descriptionNeed || !neighborhood
 
   function handleUpdateWeek(weeks: number) {
     setSelectedWeek((prevState) =>
@@ -59,119 +64,151 @@ export function JobContract(props: JobContractProps) {
     )
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Horários do Prestador</Text>
+    <ScrollView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Horários do Prestador</Text>
 
-      <View style={styles.weekContainer}>
-        {selectedWeek.map((date, index) => (
-          <DayOfMonth
-            key={String(index)}
-            date={date}
-            isActive={Boolean(selectedDate) && isSameDay(date, selectedDate!)}
-            isDisabled={
-              date < currentFormattedDate ||
-              job?.days_of_week_display[index] === false
-            }
-            onPress={() => {
-              setSelectedTime(null)
-              setSelectedDate(date)
-            }}
-          />
-        ))}
-      </View>
+        <View style={styles.weekContainer}>
+          {selectedWeek.map((date, index) => (
+            <DayOfMonth
+              key={String(index)}
+              date={date}
+              isActive={Boolean(selectedDate) && isSameDay(date, selectedDate!)}
+              isDisabled={
+                date < currentFormattedDate ||
+                job?.days_of_week_display[index] === false
+              }
+              onPress={() => {
+                setSelectedTime(null)
+                setSelectedDate(date)
+              }}
+            />
+          ))}
+        </View>
 
-      <View style={styles.pagination}>
-        <TouchableOpacity
-          style={
-            isInCurrentWeek
-              ? styles.paginationButtonDisabled
-              : styles.paginationButton
-          }
-          disabled={isInCurrentWeek}
-          onPress={() => {
-            setSelectedDate(null)
-            setSelectedTime(null)
-            handleUpdateWeek(-1)
-          }}
-        >
-          <Text
+        <View style={styles.pagination}>
+          <TouchableOpacity
             style={
               isInCurrentWeek
-                ? styles.paginationTextDisabled
-                : styles.paginationText
+                ? styles.paginationButtonDisabled
+                : styles.paginationButton
             }
+            disabled={isInCurrentWeek}
+            onPress={() => {
+              setSelectedDate(null)
+              setSelectedTime(null)
+              handleUpdateWeek(-1)
+            }}
           >
-            Semana anterior
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.paginationText}>Semana anterior</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={
+              hasNextWeekInNext30Days
+                ? styles.paginationButtonDisabled
+                : styles.paginationButton
+            }
+            onPress={() => {
+              setSelectedDate(null)
+              setSelectedTime(null)
+              handleUpdateWeek(1)
+            }}
+            disabled={hasNextWeekInNext30Days}
+          >
+            <Text
+              style={
+                hasNextWeekInNext30Days
+                  ? styles.paginationTextDisabled
+                  : styles.paginationText
+              }
+            >
+              Próxima semana
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <JobTimes
+          hasSelectedDate={Boolean(selectedDate)}
+          currentTime={currentTime}
+          setSelectedTime={setSelectedTime}
+          times={times}
+          isInCurrentDay={isInCurrentDay}
+          selectedTime={selectedTime}
+          services={services}
+          isLoading={isLoadingServices}
+        />
+
+        <View>
+          <Text style={{ fontSize: 24 }}>Descreva sua necessidade</Text>
+          <View
+            style={{
+              backgroundColor: 'transparent',
+              borderColor: '#000000',
+              borderWidth: 1,
+              height: 100,
+              borderRadius: 8,
+              marginTop: 10,
+            }}
+          >
+            <TextInput
+              multiline
+              numberOfLines={5}
+              maxLength={500}
+              onChangeText={(text) => setDescriptionNeed(text)}
+              value={descriptionNeed}
+              style={{
+                padding: 10,
+                alignItems: 'flex-end',
+                textAlignVertical: 'top',
+                fontSize: 16,
+              }}
+            />
+          </View>
+        </View>
+
+        <View>
+          <Text style={{ fontSize: 24 }}>Qual seu bairro?</Text>
+          <View
+            style={{
+              backgroundColor: 'transparent',
+              borderColor: '#000000',
+              borderWidth: 1,
+              height: 40,
+              borderRadius: 8,
+              marginTop: 10,
+            }}
+          >
+            <TextInput
+              maxLength={30}
+              onChangeText={(text) => setNeighborhood(text)}
+              value={neighborhood}
+              style={{
+                padding: 10,
+                alignItems: 'flex-end',
+                textAlignVertical: 'top',
+                fontSize: 16,
+              }}
+            />
+          </View>
+        </View>
+
         <TouchableOpacity
           style={
-            hasNextWeekInNext30Days
+            isNotFormComplete
               ? styles.paginationButtonDisabled
               : styles.paginationButton
           }
-          onPress={() => {
-            setSelectedDate(null)
-            setSelectedTime(null)
-            handleUpdateWeek(1)
-          }}
-          disabled={hasNextWeekInNext30Days}
+          disabled={isNotFormComplete}
         >
-          <Text
-            style={
-              hasNextWeekInNext30Days
-                ? styles.paginationTextDisabled
-                : styles.paginationText
-            }
-          >
-            Próxima semana
-          </Text>
+          <Text style={styles.paginationText}>Contratar</Text>
         </TouchableOpacity>
       </View>
-
-      <JobTimes
-        hasSelectedDate={Boolean(selectedDate)}
-        currentTime={currentTime}
-        setSelectedTime={setSelectedTime}
-        times={times}
-        isInCurrentDay={isInCurrentDay}
-        selectedTime={selectedTime}
-        services={services}
-        isLoading={isLoadingServices}
-      />
-
-      <View>
-        <Text style={{ fontSize: 16 }}>Descreva sua necessidade</Text>
-        <View
-          style={{
-            backgroundColor: 'transparent',
-            borderColor: '#000000',
-            borderWidth: 1,
-            height: 100,
-            borderRadius: 8,
-            marginTop: 10,
-          }}
-        >
-          <TextInput
-            multiline
-            numberOfLines={5}
-            maxLength={500}
-            onChangeText={(text) => onChangeText(text)}
-            value={value}
-            style={{
-              padding: 10,
-              alignItems: 'flex-end',
-              textAlignVertical: 'top',
-            }}
-          />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.paginationButton}>
-        <Text style={styles.paginationText}>Contratar</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   )
 }
 
