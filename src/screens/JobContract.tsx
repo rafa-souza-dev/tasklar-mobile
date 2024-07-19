@@ -6,18 +6,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { addWeeks, differenceInDays, isSameDay, setDay } from 'date-fns'
-import { useEffect, useState } from 'react'
-import { RootStackParamList } from '../@types/navigation'
+import { addWeeks, differenceInDays, format, isSameDay } from 'date-fns'
+import { useState } from 'react'
 
+import { RootStackParamList } from '../@types/navigation'
 import { DayOfMonth } from '../components/DayOfMonth'
-import {
-  generateWeekOfDay,
-  getTimesInInterval,
-  isTimeBiggerThan,
-} from '../utils/date'
-import { ScheduleTime } from '../components/ScheduleTime'
-import { Job } from '../modules/jobs/types'
+import { generateWeekOfDay } from '../utils/date'
+import { useFormattedJob } from '../modules/jobs/stores'
+import { JobTimes } from '../modules/jobs/JobTimes'
+import { useServicesByJob } from '../modules/services/stores'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -25,48 +22,23 @@ type JobContractProps = {
   route: ContractScreenRouteProp
 }
 
-const mockJob: Job = {
-  category: {
-    id: 1,
-    name: 'faxina',
-  },
-  contact: '1',
-  days_of_week_display: [false, false, true, true, true, false, true],
-  description: 'teste',
-  duration: '1hr30min',
-  start_time: '06:00:00',
-  end_time: '23:30:00',
-  id: 1,
-  tasker: {
-    id: 1,
-    user: {
-      name: 'a',
-    },
-  },
-  value: 100,
-} as const
-
-function getFirstServiceDayIndex(days: boolean[]): number {
-  for (let i = 0; i < days.length; i++) {
-    if (days[i] === true) {
-      return i
-    }
-  }
-
-  return 0
-}
-
 export function JobContract(props: JobContractProps) {
+  const jobId = props.route.params.id
+  const { data: job, times } = useFormattedJob(jobId)
   const [value, onChangeText] = useState('Useless Multiline Placeholder')
   const currentDate = new Date()
   const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`
-  const foundFirstJobDay = getFirstServiceDayIndex(mockJob.days_of_week_display)
   const currentFormattedDate = new Date(new Date().toDateString())
-  const [selectedDate, setSelectedDate] = useState<Date>(
-    setDay(currentFormattedDate, foundFirstJobDay),
-  )
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedWeek, setSelectedWeek] = useState<Date[]>(
     generateWeekOfDay(currentFormattedDate),
+  )
+  const { data: services, isLoading: isLoadingServices } = useServicesByJob(
+    jobId,
+    {
+      date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : undefined,
+      status: 'accepted',
+    },
   )
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const isInCurrentWeek = selectedWeek.some((date) =>
@@ -77,22 +49,15 @@ export function JobContract(props: JobContractProps) {
       generateWeekOfDay(addWeeks(selectedWeek[0], 1))[0],
       currentFormattedDate,
     ) >= 30
-  const times = getTimesInInterval({
-    startTime: mockJob.start_time,
-    endTime: mockJob.end_time,
-    duration: mockJob.duration,
-  })
-  const isInCurrentDay = isSameDay(currentFormattedDate, selectedDate)
+  const isInCurrentDay = Boolean(
+    selectedDate && isSameDay(currentFormattedDate, selectedDate),
+  )
 
   function handleUpdateWeek(weeks: number) {
     setSelectedWeek((prevState) =>
       generateWeekOfDay(addWeeks(prevState[0], weeks)),
     )
   }
-
-  useEffect(() => {
-    setSelectedTime(null)
-  }, [selectedDate])
 
   return (
     <View style={styles.container}>
@@ -103,12 +68,13 @@ export function JobContract(props: JobContractProps) {
           <DayOfMonth
             key={String(index)}
             date={date}
-            isActive={isSameDay(date, selectedDate)}
+            isActive={Boolean(selectedDate) && isSameDay(date, selectedDate!)}
             isDisabled={
               date < currentFormattedDate ||
-              mockJob.days_of_week_display[index] === false
+              job?.days_of_week_display[index] === false
             }
             onPress={() => {
+              setSelectedTime(null)
               setSelectedDate(date)
             }}
           />
@@ -124,6 +90,8 @@ export function JobContract(props: JobContractProps) {
           }
           disabled={isInCurrentWeek}
           onPress={() => {
+            setSelectedDate(null)
+            setSelectedTime(null)
             handleUpdateWeek(-1)
           }}
         >
@@ -144,6 +112,8 @@ export function JobContract(props: JobContractProps) {
               : styles.paginationButton
           }
           onPress={() => {
+            setSelectedDate(null)
+            setSelectedTime(null)
             handleUpdateWeek(1)
           }}
           disabled={hasNextWeekInNext30Days}
@@ -160,19 +130,16 @@ export function JobContract(props: JobContractProps) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.scheduleContainer}>
-        {times.map((time, index) => (
-          <ScheduleTime
-            key={index}
-            time={time}
-            isDisabled={isInCurrentDay && isTimeBiggerThan(currentTime, time)}
-            isActive={selectedTime === time}
-            onPress={() => {
-              setSelectedTime(time)
-            }}
-          />
-        ))}
-      </View>
+      <JobTimes
+        hasSelectedDate={Boolean(selectedDate)}
+        currentTime={currentTime}
+        setSelectedTime={setSelectedTime}
+        times={times}
+        isInCurrentDay={isInCurrentDay}
+        selectedTime={selectedTime}
+        services={services}
+        isLoading={isLoadingServices}
+      />
 
       <View>
         <Text style={{ fontSize: 16 }}>Descreva sua necessidade</Text>

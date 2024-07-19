@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { getJob, getJobs, postJob } from './client'
 import { GetJobsRequest, JobAbridged } from './types'
 import { useJobFilter } from './JobFilterContext'
+import { getTimesInInterval } from '../../utils/date'
 
 export function useJobs(params?: GetJobsRequest) {
   return useQuery({
@@ -33,8 +34,15 @@ export function useFormattedJob(jobId: number) {
     style: 'currency',
     currency: 'BRL',
   }).format(Number(queryJob.data?.value))
+  const times = queryJob.data
+    ? getTimesInInterval({
+        startTime: queryJob.data?.start_time,
+        endTime: queryJob.data?.end_time,
+        duration: queryJob.data?.duration,
+      })
+    : null
 
-  return { ...queryJob, formattedHourlyRate }
+  return { ...queryJob, formattedHourlyRate, times }
 }
 
 export function useFormattedJobs() {
