@@ -7,6 +7,7 @@ export type User = {
   phone: string
   profile_type: string
   tasker: number
+  consumer: number
 }
 
 export type GetWhoamiResponse = {

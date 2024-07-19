@@ -1,4 +1,9 @@
-import { RouteProp } from '@react-navigation/native'
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native'
 import {
   ScrollView,
   StyleSheet,
@@ -8,15 +13,16 @@ import {
   View,
 } from 'react-native'
 import { addWeeks, differenceInDays, format, isSameDay } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { RootStackParamList } from '../@types/navigation'
 import { DayOfMonth } from '../components/DayOfMonth'
 import { generateWeekOfDay } from '../utils/date'
 import { useFormattedJob } from '../modules/jobs/stores'
 import { JobTimes } from '../modules/jobs/JobTimes'
-import { useServicesByJob } from '../modules/services/stores'
+import { useCreateService, useServicesByJob } from '../modules/services/stores'
 import { Loading } from '../components/Loading'
+import { useWhoami } from '../modules/users/stores'
 
 type ContractScreenRouteProp = RouteProp<RootStackParamList, 'JobContract'>
 
@@ -25,6 +31,9 @@ type JobContractProps = {
 }
 
 export function JobContract(props: JobContractProps) {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const { data: user } = useWhoami()
+  const { mutate, isPending, isSuccess } = useCreateService()
   const jobId = props.route.params.id
   const { data: job, times, isLoading } = useFormattedJob(jobId)
   const [descriptionNeed, setDescriptionNeed] = useState('')
@@ -36,13 +45,13 @@ export function JobContract(props: JobContractProps) {
   const [selectedWeek, setSelectedWeek] = useState<Date[]>(
     generateWeekOfDay(currentFormattedDate),
   )
-  const { data: services, isLoading: isLoadingServices } = useServicesByJob(
-    jobId,
-    {
-      date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : undefined,
-      status: 'accepted',
-    },
-  )
+  const formattedSelectedDate = selectedDate
+    ? format(selectedDate, 'yyyy-MM-dd')
+    : undefined
+  const { data: services, isFetching } = useServicesByJob(jobId, {
+    date: formattedSelectedDate,
+    status: 'accepted',
+  })
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const isInCurrentWeek = selectedWeek.some((date) =>
     isSameDay(date, currentFormattedDate),
@@ -64,7 +73,30 @@ export function JobContract(props: JobContractProps) {
     )
   }
 
-  if (isLoading) {
+  async function handleCreateService() {
+    const body = {
+      consumer_id: user?.consumer,
+      tasker_id: job?.tasker.id,
+      job_id: job?.id,
+      request_description: descriptionNeed,
+      date: formattedSelectedDate,
+      time: `${selectedTime?.slice(0, 5)}:00`,
+      status: 'pending',
+      uf: job?.tasker?.user?.uf,
+      city: job?.tasker?.user?.city,
+      neighborhood,
+    }
+
+    mutate({ ...body })
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigation.navigate('JobList')
+    }
+  }, [isSuccess])
+
+  if (isLoading || isPending) {
     return <Loading />
   }
 
@@ -140,7 +172,7 @@ export function JobContract(props: JobContractProps) {
           isInCurrentDay={isInCurrentDay}
           selectedTime={selectedTime}
           services={services}
-          isLoading={isLoadingServices}
+          isLoading={isFetching}
         />
 
         <View>
@@ -204,6 +236,7 @@ export function JobContract(props: JobContractProps) {
               : styles.paginationButton
           }
           disabled={isNotFormComplete}
+          onPress={handleCreateService}
         >
           <Text style={styles.paginationText}>Contratar</Text>
         </TouchableOpacity>
