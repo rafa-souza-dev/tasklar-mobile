@@ -94,7 +94,7 @@ function BottomTabs() {
         />
       )}
       <Tab.Screen
-        name="Profile"
+        name="ProfileStack"
         component={ProfileStack}
         options={{
           headerTitle: 'Meu Perfil',

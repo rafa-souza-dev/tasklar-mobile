@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../@types/navigation'
+import { useWhoami } from '../modules/users/stores';
 
 
 
@@ -20,24 +21,9 @@ export function Profile() {
   const { onLogout } = useAuth();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const { data:user } = useWhoami()
+  const istasker = user?.profile_type === 'T'
 
-// useEffect(() => {
-//    axios.get('/whoami/')
-//      .then(response => {
-//        setProfile(response.data);
-//      })
- //     .catch(error => {
-//        console.error('Error fetching profile data:', error);
- //     });
-//  }, []);
-
-//  if (!profile) {
-//    return (
-//      <View style={styles.container}>
-//        <Text>Loading...</Text>
-//      </View>
-//    );
-//  }
 
   return (
     <View style={styles.container}>
@@ -46,10 +32,10 @@ export function Profile() {
           source={{ uri: 'https://via.placeholder.com/150' }}
           style={styles.profileImage}
         />
-        <Text style={styles.name}>name</Text>
-        <Text style={styles.location}>location</Text>
-        <Text style={styles.email}>email</Text>
-        <Text style={styles.profession}>profession</Text>
+        <Text style={styles.name}>{user?.name}</Text>
+        <Text style={styles.location}>{user?.city}</Text>
+        <Text style={styles.email}>{user?.email}</Text>
+        <Text style={styles.phone}>{user?.phone}</Text>
       </View>
       
       <TouchableOpacity 
@@ -58,21 +44,19 @@ export function Profile() {
       >
         <Text style={styles.buttonText}>Editar Perfil</Text>
       </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate('EditServices')}
+      {istasker && (<TouchableOpacity 
+        style={styles.button}
       >
         <Text style={styles.buttonText}>Editar Serviços</Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => navigation.navigate('RequestedProposals')}
+      </TouchableOpacity>)}
+      <TouchableOpacity
+        style={styles.button}
       >
         <Text style={styles.buttonText}>Propostas Solicitadas</Text>
       </TouchableOpacity>
       <TouchableOpacity 
         style={styles.button} 
-        onPress={() => navigation.navigate('Appointments')}
+        onPress={() => navigation.navigate(istasker ? 'ServiceProviderSchedule': 'Appointments')}
       >
         <Text style={styles.buttonText}>Agendamentos</Text>
       </TouchableOpacity>
@@ -109,6 +93,11 @@ const styles = StyleSheet.create({
     color: '#666666'
   },
   email: {
+    fontSize: 16,
+    color: '#666666',
+    marginTop: 8
+  },
+  phone: {
     fontSize: 16,
     color: '#666666',
     marginTop: 8
