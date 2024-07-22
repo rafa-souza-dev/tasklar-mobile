@@ -10,6 +10,8 @@ export type RootStackParamList = {
   Home: undefined
   JobDetails: { id: number }
   JobList: undefined
+  ServiceProviderSchedule: undefined
+
 }
 
 export type RootTabsParamList = {
