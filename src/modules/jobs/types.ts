@@ -7,6 +7,8 @@ export type Period = {
 
 type User = {
   name: string
+  uf: string
+  city: string
 }
 
 export type JobAbridged = {
@@ -17,12 +19,11 @@ export type JobAbridged = {
     user: User
   }
   contact: string
-  value: string
+  value: number
   description: string
   duration: string
   start_time: string
   end_time: string
-  category: number
 }
 
 export type Job = JobAbridged & {

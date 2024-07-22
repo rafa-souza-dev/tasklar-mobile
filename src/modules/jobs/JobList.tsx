@@ -8,6 +8,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native'
+import { useIsFocused } from '@react-navigation/native'
+import { useEffect } from 'react'
 
 import { useFormattedJobs } from './stores'
 import { Skeleton } from './Skeleton'
@@ -15,6 +17,7 @@ import { JobItem } from './JobItem'
 import { useJobFilter } from './JobFilterContext'
 
 export function JobList() {
+  const isFocused = useIsFocused()
   const { isFirstPage, setSelectedPage } = useJobFilter()
   const {
     data: jobs,
@@ -23,7 +26,14 @@ export function JobList() {
     offset,
     isFetching,
     next,
+    refetch,
   } = useFormattedJobs()
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch()
+    }
+  }, [isFocused])
 
   if (isFetching && isFirstPage) {
     return <SkeletonJobList />
