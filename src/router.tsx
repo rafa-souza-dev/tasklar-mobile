@@ -98,6 +98,7 @@ function BottomTabs() {
         component={ProfileStack}
         options={{
           headerTitle: 'Meu Perfil',
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../assets/profile-white.png')}
@@ -148,7 +149,7 @@ function ProfileStack() {
         name="Profile"
         component={Profile}
         options={{
-          title: 'PERFIL',
+          title: 'Meu Perfil',
         }}
       />
       <Stack.Screen
