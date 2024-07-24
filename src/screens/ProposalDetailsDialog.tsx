@@ -1,13 +1,16 @@
 import { Modal, StyleSheet, Text, Pressable, View } from 'react-native'
+import { ServiceFull } from '../modules/services/types'
 
 type ProposalDetailsDialogProps = {
   modalVisible?: boolean
   setModalVisible: (isVisible: boolean) => void
+  service: ServiceFull
 }
 
 export function ProposalDetailsDialog({
   setModalVisible,
   modalVisible,
+  service,
 }: ProposalDetailsDialogProps) {
   return (
     <Modal
@@ -21,15 +24,14 @@ export function ProposalDetailsDialog({
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.modalText}>Rafael Souza</Text>
-            <Text style={styles.modalText}>Pesqueira - Prado</Text>
+            <Text style={styles.modalText}>{service.consumer.user.name}</Text>
+            <Text
+              style={styles.modalText}
+            >{`${service.city} - ${service.neighborhood}`}</Text>
           </View>
 
           <Text style={{ ...styles.modalText, textAlign: 'auto' }}>
-            Recentemente, notei que algumas luzes em minha casa começaram a
-            piscar intermitentemente. Além disso, alguns dos meus
-            eletrodomésticos parecem não estar funcionando corretamente, como o
-            micro-ondas e a geladeira.
+            {service.request_description}
           </Text>
 
           <View style={{ gap: 8 }}>

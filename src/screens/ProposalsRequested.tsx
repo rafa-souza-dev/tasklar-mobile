@@ -7,51 +7,73 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { ProposalDetailsDialog } from './ProposalDetailsDialog'
 import { useState } from 'react'
+
+import { ProposalDetailsDialog } from './ProposalDetailsDialog'
+import { useWhoami } from '../modules/users/stores'
+import { useServicesByTasker } from '../modules/services/stores'
+import { Loading } from '../components/Loading'
+import { format } from 'date-fns'
 
 export function ProposalsRequested() {
   const [modalVisible, setModalVisible] = useState(false)
+  const { data: user, isLoading: isUserLoading } = useWhoami()
+  const taskerId = user?.tasker
+  const { data: services, isLoading: isServicesLoading } = useServicesByTasker(
+    taskerId!,
+  )
+  const isLoading = isUserLoading || isServicesLoading
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <View style={styles.card}>
-          <Text style={styles.title}>Ike. H</Text>
+        {services?.map((service) => (
+          <View style={styles.card} key={service.id}>
+            <Text style={styles.title}>{service.consumer.user.name}</Text>
 
-          <View style={styles.cardMain}>
-            <View style={styles.cardDetails}>
-              <Text style={styles.descriptionText}>06/06/23 - 13h</Text>
-              <Text style={styles.descriptionText}>Serviço - Encanador</Text>
+            <View style={styles.cardMain}>
+              <View style={styles.cardDetails}>
+                <Text
+                  style={styles.descriptionText}
+                >{`${format(new Date(service.date), 'dd/MM/yyyy')} - ${service.time.slice(0, 5)} horas`}</Text>
+                <Text style={styles.descriptionText}>
+                  Serviço - {service.job.category.name}
+                </Text>
+              </View>
+
+              <TouchableOpacity>
+                <Image
+                  source={require('../../assets/chat-icon.png')}
+                  style={{ width: 32 }}
+                />
+              </TouchableOpacity>
             </View>
+            <View style={styles.cardFooter}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setModalVisible((prevState) => !prevState)
+                }}
+              >
+                <Text style={styles.buttonText}>Detalhar</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity>
-              <Image
-                source={require('../../assets/chat-icon.png')}
-                style={{ width: 32 }}
+              <TouchableOpacity style={styles.buttonRefused}>
+                <Text style={styles.buttonText}>Recusar</Text>
+              </TouchableOpacity>
+
+              <ProposalDetailsDialog
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                service={service}
               />
-            </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.cardFooter}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                setModalVisible((prevState) => !prevState)
-              }}
-            >
-              <Text style={styles.buttonText}>Detalhar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.buttonRefused}>
-              <Text style={styles.buttonText}>Recusar</Text>
-            </TouchableOpacity>
-
-            <ProposalDetailsDialog
-              modalVisible={modalVisible}
-              setModalVisible={setModalVisible}
-            />
-          </View>
-        </View>
+        ))}
       </View>
     </ScrollView>
   )

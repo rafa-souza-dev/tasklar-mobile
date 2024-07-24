@@ -1,3 +1,5 @@
+import { User } from '../users/types'
+
 export type Service = {
   id: number
   request_description: string
@@ -13,12 +15,35 @@ export type Service = {
   tasker: number
 }
 
+export type ServiceFull = {
+  id: number
+  request_description: string
+  date: string
+  time: string
+  status: string
+  value: number
+  uf: string
+  city: string
+  neighborhood: string
+  consumer: {
+    user: User
+  }
+  job: {
+    category: {
+      name: string
+    }
+  }
+  tasker: number
+}
+
 export type GetServicesRequest = Partial<{
   date: string
   status: string
 }>
 
 export type GetServicesResponse = Service[]
+
+export type GetServicesFullResponse = ServiceFull[]
 
 export type PostServiceRequest = Partial<{
   consumer_id: number
