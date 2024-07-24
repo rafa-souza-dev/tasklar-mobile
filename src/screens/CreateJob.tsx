@@ -29,7 +29,7 @@ export function CreateJob() {
   const { data: user } = useWhoami()
   const [contact, setContact] = useState('')
   const [value, setValue] = useState(0)
-  const [category, setCategory] = useState(categories?.[0].id)
+  const [category, setCategory] = useState(categories?.[0]?.id)
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('1hr')
   const [startTime, setStartTime] = useState('06:00:00')
@@ -52,7 +52,7 @@ export function CreateJob() {
   const clear = () => {
     setContact('')
     setValue(0)
-    setCategory(categories?.[0].id)
+    setCategory(categories?.[0]?.id)
     setDescription('')
     setDuration('1hr')
     setStartTime('06:00:00')
