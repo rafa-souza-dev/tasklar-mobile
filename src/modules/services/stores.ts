@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { GetServicesRequest } from './types'
 import {
@@ -33,12 +33,7 @@ export function useCreateService() {
 }
 
 export function useResolveService() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: postResolveService,
-    // onSuccess() {
-    //   queryClient.invalidateQueries(['services_by_tasker'])
-    // },
   })
 }

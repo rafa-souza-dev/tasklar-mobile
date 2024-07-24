@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import {
   Image,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ProposalDetailsDialog } from './ProposalDetailsDialog'
 import { useWhoami } from '../modules/users/stores'
@@ -23,11 +24,19 @@ export function ProposalsRequested() {
   const [modalVisible, setModalVisible] = useState(false)
   const { data: user, isLoading: isUserLoading } = useWhoami()
   const taskerId = user?.tasker
-  const { data: services, isLoading: isServicesLoading } = useServicesByTasker(
-    taskerId!,
-  )
+  const {
+    data: services,
+    isLoading: isServicesLoading,
+    refetch,
+  } = useServicesByTasker(taskerId!)
   const isLoading = isUserLoading || isServicesLoading
-  const { mutateAsync, isPending } = useResolveService()
+  const { mutateAsync, isPending, isSuccess } = useResolveService()
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch()
+    }
+  }, [isSuccess])
 
   function handleAcceptService(params: postResolveServiceParams) {
     mutateAsync({ ...params, status: 'accept' })
