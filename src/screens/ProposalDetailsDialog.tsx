@@ -20,13 +20,33 @@ export function ProposalDetailsDialog({
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello, World!</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
+          <View style={{ alignItems: 'flex-start' }}>
+            <Text style={styles.modalText}>Rafael Souza</Text>
+            <Text style={styles.modalText}>Pesqueira - Prado</Text>
+          </View>
+
+          <Text style={{ ...styles.modalText, textAlign: 'auto' }}>
+            Recentemente, notei que algumas luzes em minha casa começaram a
+            piscar intermitentemente. Além disso, alguns dos meus
+            eletrodomésticos parecem não estar funcionando corretamente, como o
+            micro-ondas e a geladeira.
+          </Text>
+
+          <View style={{ gap: 8 }}>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Aceitar</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.buttonRefused]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Recusar</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
@@ -50,7 +70,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -71,6 +90,12 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
+  buttonRefused: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#DB0606',
+  },
   buttonClose: {
     backgroundColor: '#2196F3',
   },
@@ -82,5 +107,6 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontSize: 16,
   },
 })
