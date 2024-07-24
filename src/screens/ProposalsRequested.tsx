@@ -28,8 +28,9 @@ export function ProposalsRequested() {
     data: services,
     isLoading: isServicesLoading,
     refetch,
+    isFetching,
   } = useServicesByTasker(taskerId!)
-  const isLoading = isUserLoading || isServicesLoading
+  const isLoading = isUserLoading || isServicesLoading || isFetching
   const { mutateAsync, isPending, isSuccess } = useResolveService()
 
   useEffect(() => {
