@@ -3,6 +3,7 @@ import {
   GetServicesFullResponse,
   GetServicesRequest,
   GetServicesResponse,
+  postResolveServiceParams,
   PostServiceRequest,
 } from './types'
 
@@ -13,6 +14,7 @@ const SERVICES_BY_TASKER = (taskerId: number) =>
   `${TASKERS}${taskerId}/services/`
 const SERVICES = '/services/'
 const SERVICE_CREATE = `${SERVICES}create/`
+const SERVICES_ACTION = `/tasker/services/action/`
 
 export async function getServicesByJob(
   jobId: number,
@@ -35,7 +37,18 @@ export async function getServicesByTasker(taskerId: number) {
 
   const response = await client.get<GetServicesFullResponse>(
     SERVICES_BY_TASKER(taskerId),
+    {
+      params: {
+        status: 'pending',
+      },
+    },
   )
+
+  return response.data
+}
+
+export async function postResolveService(params: postResolveServiceParams) {
+  const response = await client.post(SERVICES_ACTION, params)
 
   return response.data
 }

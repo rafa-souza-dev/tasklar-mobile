@@ -11,9 +11,13 @@ import { useState } from 'react'
 
 import { ProposalDetailsDialog } from './ProposalDetailsDialog'
 import { useWhoami } from '../modules/users/stores'
-import { useServicesByTasker } from '../modules/services/stores'
+import {
+  useResolveService,
+  useServicesByTasker,
+} from '../modules/services/stores'
 import { Loading } from '../components/Loading'
 import { format } from 'date-fns'
+import { postResolveServiceParams } from '../modules/services/types'
 
 export function ProposalsRequested() {
   const [modalVisible, setModalVisible] = useState(false)
@@ -23,8 +27,17 @@ export function ProposalsRequested() {
     taskerId!,
   )
   const isLoading = isUserLoading || isServicesLoading
+  const { mutateAsync, isPending } = useResolveService()
 
-  if (isLoading) {
+  function handleAcceptService(params: postResolveServiceParams) {
+    mutateAsync({ ...params, status: 'accept' })
+  }
+
+  function handleRejectService(params: postResolveServiceParams) {
+    mutateAsync({ ...params, status: 'reject' })
+  }
+
+  if (isLoading || isPending) {
     return <Loading />
   }
 
@@ -62,7 +75,17 @@ export function ProposalsRequested() {
                 <Text style={styles.buttonText}>Detalhar</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.buttonRefused}>
+              <TouchableOpacity
+                style={styles.buttonRefused}
+                onPress={() => {
+                  handleRejectService({
+                    job_id: service.job.id,
+                    service_id: service.id,
+                    tasker_id: service.tasker,
+                    consumer_id: service.consumer.id,
+                  })
+                }}
+              >
                 <Text style={styles.buttonText}>Recusar</Text>
               </TouchableOpacity>
 
@@ -70,6 +93,7 @@ export function ProposalsRequested() {
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 service={service}
+                handleAccept={handleAcceptService}
               />
             </View>
           </View>

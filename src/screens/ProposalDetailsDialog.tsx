@@ -1,16 +1,21 @@
 import { Modal, StyleSheet, Text, Pressable, View } from 'react-native'
-import { ServiceFull } from '../modules/services/types'
+import {
+  postResolveServiceParams,
+  ServiceFull,
+} from '../modules/services/types'
 
 type ProposalDetailsDialogProps = {
   modalVisible?: boolean
   setModalVisible: (isVisible: boolean) => void
   service: ServiceFull
+  handleAccept: (params: postResolveServiceParams) => void
 }
 
 export function ProposalDetailsDialog({
   setModalVisible,
   modalVisible,
   service,
+  handleAccept,
 }: ProposalDetailsDialogProps) {
   return (
     <Modal
@@ -37,14 +42,24 @@ export function ProposalDetailsDialog({
           <View style={{ gap: 8 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                handleAccept({
+                  job_id: service.job.id,
+                  service_id: service.id,
+                  tasker_id: service.tasker,
+                  consumer_id: service.consumer.id,
+                })
+              }}
             >
               <Text style={styles.textStyle}>Aceitar</Text>
             </Pressable>
 
             <Pressable
               style={[styles.buttonRefused]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+              }}
             >
               <Text style={styles.textStyle}>Fechar</Text>
             </Pressable>

@@ -26,9 +26,11 @@ export type ServiceFull = {
   city: string
   neighborhood: string
   consumer: {
+    id: number
     user: User
   }
   job: {
+    id: number
     category: {
       name: string
     }
@@ -58,3 +60,11 @@ export type PostServiceRequest = Partial<{
   city: string
   neighborhood: string
 }>
+
+export type postResolveServiceParams = {
+  service_id: number
+  status?: string
+  consumer_id: number
+  job_id: number
+  tasker_id: number
+}
