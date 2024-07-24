@@ -50,6 +50,16 @@ export function ProposalsRequested() {
     return <Loading />
   }
 
+  if (services?.length === 0) {
+    return (
+      <View style={styles.emptyStateContainer}>
+        <Text style={styles.emptyStateText}>
+          Nenhuma solicitação de serviço foi encontrada.
+        </Text>
+      </View>
+    )
+  }
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -165,5 +175,16 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontSize: 16,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    color: 'black',
+    fontSize: 24,
+    textAlign: 'center',
   },
 })

@@ -36,12 +36,14 @@ export function Profile() {
           <Text style={styles.buttonText}>Editar Serviços</Text>
         </TouchableOpacity>
       )}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('ProposalsRequested')}
-      >
-        <Text style={styles.buttonText}>Propostas Solicitadas</Text>
-      </TouchableOpacity>
+      {istasker && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('ProposalsRequested')}
+        >
+          <Text style={styles.buttonText}>Propostas Solicitadas</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity
         style={styles.button}
         onPress={() =>
