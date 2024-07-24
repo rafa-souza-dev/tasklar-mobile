@@ -1,4 +1,3 @@
-import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import {
   Agenda,
@@ -6,11 +5,24 @@ import {
   AgendaEntry,
   DateData,
 } from 'react-native-calendars'
+import { useServicesByTasker } from '../modules/services/stores'
+import { useWhoami } from '../modules/users/stores'
+import { useState } from 'react'
+import { addMonths, format } from 'date-fns'
 
 export default function ServiceProviderSchedule() {
+  const { data: user } = useWhoami()
+  const { data: services } = useServicesByTasker(user?.tasker ?? 0, {
+    status: 'accepted',
+  })
+  const currentDate = format(new Date(), 'yyyy-MM-dd')
+  const [selectedDate, setSelectedDate] = useState(currentDate)
+
+  console.log(services)
+
   const items: AgendaSchedule = {
-    '2024-07-18': [
-      { name: 'Entrevista com candidato A', height: 50, day: '2024-07-18' },
+    [currentDate]: [
+      { name: 'Entrevista com candidato A', height: 50, day: currentDate },
     ],
     '2024-07-19': [
       { name: 'Reunião de equipe', height: 80, day: '2024-07-19' },
@@ -56,9 +68,9 @@ export default function ServiceProviderSchedule() {
       onDayPress={(day: DateData) => {
         console.log('day pressed', day)
       }}
-      selected={'2024-07-18'}
-      minDate={'2024-07-01'}
-      maxDate={'2024-07-31'}
+      selected={selectedDate}
+      minDate={currentDate}
+      maxDate={addMonths(new Date(currentDate), 1)}
       pastScrollRange={3}
       futureScrollRange={3}
       renderItem={renderItem}
@@ -74,16 +86,10 @@ export default function ServiceProviderSchedule() {
       }}
       hideKnob={false}
       showClosingKnob={true}
-      markedDates={{
-        '2024-07-18': { selected: true, marked: true },
-        '2024-07-19': { marked: true },
-        '2024-07-20': { disabled: true },
-      }}
       disabledByDefault={false}
-      onRefresh={() => console.log('refreshing...')}
       refreshing={false}
       theme={{
-        agendaDayTextColor: 'yellow',
+        agendaDayTextColor: 'black',
         agendaDayNumColor: 'green',
         agendaTodayColor: 'red',
         agendaKnobColor: 'blue',

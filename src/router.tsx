@@ -156,12 +156,12 @@ function ProfileStack() {
       <Stack.Screen
         name="Appointments"
         component={Appointments}
-        options={{ title: 'Agendamentos do Cliente' }}
+        options={{ title: 'Agendamentos' }}
       />
       <Stack.Screen
         name="ServiceProviderSchedule"
         component={ServiceProviderSchedule}
-        options={{ title: 'Agendamentos do Prestador' }}
+        options={{ title: 'Agendamentos' }}
       />
       <Stack.Screen
         name="ProposalsRequested"
