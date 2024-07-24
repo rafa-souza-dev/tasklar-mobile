@@ -46,7 +46,7 @@ export function ProposalDetailsDialog({
               style={[styles.buttonRefused]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Recusar</Text>
+              <Text style={styles.textStyle}>Fechar</Text>
             </Pressable>
           </View>
         </View>
