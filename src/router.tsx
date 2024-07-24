@@ -12,8 +12,8 @@ import { Home } from './screens/Home'
 import { JobFilterDialog } from './modules/jobs/JobFilterDialog'
 import { JobFilterProvider } from './modules/jobs/JobFilterContext'
 import { JobDetails } from './screens/JobDetails'
-import  Appointments  from './screens/Appointments'
-import  ServiceProviderSchedule  from './screens/ServiceProviderSchedule'
+import Appointments from './screens/Appointments'
+import ServiceProviderSchedule from './screens/ServiceProviderSchedule'
 import { CreateJob } from './screens/CreateJob'
 import { JobContract } from './screens/JobContract'
 import { useWhoami } from './modules/users/stores'
@@ -143,25 +143,25 @@ function JobStack() {
 
 function ProfileStack() {
   return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: 'PERFIL',
-          }}
-        />
-        <Stack.Screen
-          name="Appointments"
-          component={Appointments}
-          options={{ title: 'Agendamentos do Cliente' }}
-        />
-        <Stack.Screen
-          name="ServiceProviderSchedule"
-          component={ServiceProviderSchedule}
-          options={{ title: 'Agendamentos do Prestador' }}
-        />
-      </Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: 'PERFIL',
+        }}
+      />
+      <Stack.Screen
+        name="Appointments"
+        component={Appointments}
+        options={{ title: 'Agendamentos do Cliente' }}
+      />
+      <Stack.Screen
+        name="ServiceProviderSchedule"
+        component={ServiceProviderSchedule}
+        options={{ title: 'Agendamentos do Prestador' }}
+      />
+    </Stack.Navigator>
   )
 }
 

@@ -1,69 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 // Dados mockados
 const mockAppointments = [
   {
     id: 1,
-    name: "Ike. H",
-    date: "06/06/23",
-    time: "13h",
-    service: "Encanador",
-    status: "Aceito",
-    image: "https://via.placeholder.com/50" // substitua pela URL real da imagem
+    name: 'Ike. H',
+    date: '06/06/23',
+    time: '13h',
+    service: 'Encanador',
+    status: 'Aceito',
+    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
   },
   {
     id: 2,
-    name: "Ike. H",
-    date: "24/06/23",
-    time: "17h",
-    service: "Eletricista",
-    status: "Pendente",
-    image: "https://via.placeholder.com/50" // substitua pela URL real da imagem
+    name: 'Ike. H',
+    date: '24/06/23',
+    time: '17h',
+    service: 'Eletricista',
+    status: 'Pendente',
+    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
   },
   {
     id: 3,
-    name: "Ike. H",
-    date: "24/06/23",
-    time: "17h",
-    service: "Eletricista",
-    status: "Recusado",
-    image: "https://via.placeholder.com/50" // substitua pela URL real da imagem
-  }
-];
+    name: 'Ike. H',
+    date: '24/06/23',
+    time: '17h',
+    service: 'Eletricista',
+    status: 'Recusado',
+    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
+  },
+]
 
 export default function Appointments() {
-  const navigation = useNavigation();
-  const [appointments, setAppointments] = useState(mockAppointments);
+  const navigation = useNavigation()
+  const [appointments, setAppointments] = useState(mockAppointments)
 
   useEffect(() => {
     // Simulando a chamada de API com dados mockados
-    setAppointments(mockAppointments);
-  }, []);
+    setAppointments(mockAppointments)
+  }, [])
 
   const getStatusStyle = (status: string) => {
     switch (status) {
       case 'Aceito':
-        return styles.accepted;
+        return styles.accepted
       case 'Pendente':
-        return styles.pending;
+        return styles.pending
       case 'Recusado':
-        return styles.rejected;
+        return styles.rejected
       default:
-        return {};
+        return {}
     }
-  };
+  }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Meus Agendamentos</Text>
-      {appointments.map(appointment => (
+      {appointments.map((appointment) => (
         <View key={appointment.id} style={styles.card}>
           <Image source={{ uri: appointment.image }} style={styles.image} />
           <View style={styles.details}>
             <Text style={styles.name}>{appointment.name}</Text>
-            <Text style={styles.date}>{appointment.date} - {appointment.time}</Text>
+            <Text style={styles.date}>
+              {appointment.date} - {appointment.time}
+            </Text>
             <Text style={styles.service}>Serviço - {appointment.service}</Text>
             <View style={[styles.status, getStatusStyle(appointment.status)]}>
               <Text style={styles.statusText}>{appointment.status}</Text>
@@ -72,7 +74,7 @@ export default function Appointments() {
         </View>
       ))}
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -144,4 +146,4 @@ const styles = StyleSheet.create({
   rejected: {
     backgroundColor: '#FF0000',
   },
-});
+})

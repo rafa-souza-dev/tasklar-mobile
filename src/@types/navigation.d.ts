@@ -11,7 +11,7 @@ export type RootStackParamList = {
   JobDetails: { id: number }
   JobList: undefined
   ServiceProviderSchedule: undefined
-  
+
   JobContract: { id: number }
 }
 
