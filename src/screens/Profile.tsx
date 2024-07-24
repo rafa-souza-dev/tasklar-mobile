@@ -25,17 +25,6 @@ export function Profile() {
         <Text style={styles.phone}>{user?.phone}</Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('EditProfile')}
-      >
-        <Text style={styles.buttonText}>Editar Perfil</Text>
-      </TouchableOpacity>
-      {istasker && (
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Editar Serviços</Text>
-        </TouchableOpacity>
-      )}
       {istasker && (
         <TouchableOpacity
           style={styles.button}
