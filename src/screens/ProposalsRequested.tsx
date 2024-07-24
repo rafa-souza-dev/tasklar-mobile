@@ -29,7 +29,9 @@ export function ProposalsRequested() {
     isLoading: isServicesLoading,
     refetch,
     isFetching,
-  } = useServicesByTasker(taskerId!)
+  } = useServicesByTasker(taskerId!, {
+    status: 'pending',
+  })
   const isLoading = isUserLoading || isServicesLoading || isFetching
   const { mutateAsync, isPending, isSuccess } = useResolveService()
 

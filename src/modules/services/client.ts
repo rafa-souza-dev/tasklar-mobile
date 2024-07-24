@@ -32,15 +32,16 @@ export async function getServicesByJob(
   return response.data
 }
 
-export async function getServicesByTasker(taskerId: number) {
+export async function getServicesByTasker(
+  taskerId: number,
+  params?: GetServicesRequest,
+) {
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
   const response = await client.get<GetServicesFullResponse>(
     SERVICES_BY_TASKER(taskerId),
     {
-      params: {
-        status: 'pending',
-      },
+      params,
     },
   )
 

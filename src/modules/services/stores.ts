@@ -17,10 +17,13 @@ export function useServicesByJob(jobId: number, params?: GetServicesRequest) {
   })
 }
 
-export function useServicesByTasker(taskerId: number) {
+export function useServicesByTasker(
+  taskerId: number,
+  params?: GetServicesRequest,
+) {
   return useQuery({
     queryKey: ['services_by_tasker', taskerId],
-    queryFn: () => getServicesByTasker(taskerId),
+    queryFn: () => getServicesByTasker(taskerId, params),
     enabled: Boolean(taskerId),
     staleTime: 0,
   })
