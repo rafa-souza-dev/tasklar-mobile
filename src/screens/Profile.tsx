@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable jsx-a11y/alt-text */
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import axios from 'axios'
 
 import { useAuth } from '../contexts/AuthContext'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../@types/navigation'
 import { useWhoami } from '../modules/users/stores'
 
-interface UserProfile {
-  name: string
-  location: string
-  email: string
-  profession: string
-}
-
 export function Profile() {
   const { onLogout } = useAuth()
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
   const { data: user } = useWhoami()
   const istasker = user?.profile_type === 'T'
 
@@ -45,7 +36,10 @@ export function Profile() {
           <Text style={styles.buttonText}>Editar Serviços</Text>
         </TouchableOpacity>
       )}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('ProposalsRequested')}
+      >
         <Text style={styles.buttonText}>Propostas Solicitadas</Text>
       </TouchableOpacity>
       <TouchableOpacity

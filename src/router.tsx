@@ -18,6 +18,7 @@ import { CreateJob } from './screens/CreateJob'
 import { JobContract } from './screens/JobContract'
 import { useWhoami } from './modules/users/stores'
 import { Loading } from './components/Loading'
+import { ProposalsRequested } from './screens/ProposalsRequested'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -161,6 +162,11 @@ function ProfileStack() {
         name="ServiceProviderSchedule"
         component={ServiceProviderSchedule}
         options={{ title: 'Agendamentos do Prestador' }}
+      />
+      <Stack.Screen
+        name="ProposalsRequested"
+        component={ProposalsRequested}
+        options={{ title: 'Solicitações' }}
       />
     </Stack.Navigator>
   )
