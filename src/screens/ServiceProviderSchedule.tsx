@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Agenda, AgendaSchedule, AgendaEntry, DateData } from 'react-native-calendars';
 
-const ServiceProviderSchedule: React.FC = () => {
+export default function ServiceProviderSchedule() {
   const items: AgendaSchedule = {
     '2024-07-18': [{ name: 'Entrevista com candidato A', height: 50, day: '2024-07-18' }],
     '2024-07-19': [{ name: 'Reunião de equipe', height: 80, day: '2024-07-19' }],
@@ -105,5 +105,3 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
-
-export default ServiceProviderSchedule;
