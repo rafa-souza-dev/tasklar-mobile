@@ -1,17 +1,21 @@
 import { client } from '../../client'
 import {
   GetServicesFullResponse,
+  GetServicesFullTaskerResponse,
   GetServicesRequest,
   GetServicesResponse,
   postResolveServiceParams,
   PostServiceRequest,
 } from './types'
 
+const CONSUMERS = '/consumers/'
 const TASKERS = '/taskers/'
 const JOBS = '/jobs/'
 const SERVICES_BY_JOB = (jobId: number) => `${JOBS}${jobId}/services/`
 const SERVICES_BY_TASKER = (taskerId: number) =>
   `${TASKERS}${taskerId}/services/`
+const SERVICES_BY_CONSUMER = (consumerId: number) =>
+  `${CONSUMERS}${consumerId}/services/`
 const SERVICES = '/services/'
 const SERVICE_CREATE = `${SERVICES}create/`
 const SERVICES_ACTION = `/tasker/services/action/`
@@ -40,6 +44,22 @@ export async function getServicesByTasker(
 
   const response = await client.get<GetServicesFullResponse>(
     SERVICES_BY_TASKER(taskerId),
+    {
+      params,
+    },
+  )
+
+  return response.data
+}
+
+export async function getServicesByConsumer(
+  consumerId: number,
+  params?: GetServicesRequest,
+) {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  const response = await client.get<GetServicesFullTaskerResponse>(
+    SERVICES_BY_CONSUMER(consumerId),
     {
       params,
     },

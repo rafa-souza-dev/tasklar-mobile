@@ -38,6 +38,29 @@ export type ServiceFull = {
   tasker: number
 }
 
+export type ServiceFullTasker = {
+  id: number
+  request_description: string
+  date: string
+  time: string
+  status: string
+  value: number
+  uf: string
+  city: string
+  neighborhood: string
+  consumer: number
+  job: {
+    id: number
+    category: {
+      name: string
+    }
+  }
+  tasker: {
+    id: number
+    user: User
+  }
+}
+
 export type GetServicesRequest = Partial<{
   date: string
   status: string
@@ -46,6 +69,8 @@ export type GetServicesRequest = Partial<{
 export type GetServicesResponse = Service[]
 
 export type GetServicesFullResponse = ServiceFull[]
+
+export type GetServicesFullTaskerResponse = ServiceFullTasker[]
 
 export type PostServiceRequest = Partial<{
   consumer_id: number

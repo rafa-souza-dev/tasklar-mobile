@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { GetServicesRequest } from './types'
 import {
+  getServicesByConsumer,
   getServicesByJob,
   getServicesByTasker,
   postResolveService,
@@ -25,6 +26,18 @@ export function useServicesByTasker(
     queryKey: ['services_by_tasker', taskerId],
     queryFn: () => getServicesByTasker(taskerId, params),
     enabled: Boolean(taskerId),
+    staleTime: 0,
+  })
+}
+
+export function useServicesByConsumer(
+  consumerId: number,
+  params?: GetServicesRequest,
+) {
+  return useQuery({
+    queryKey: ['services_by_consumer', consumerId],
+    queryFn: () => getServicesByConsumer(consumerId, params),
+    enabled: Boolean(consumerId),
     staleTime: 0,
   })
 }

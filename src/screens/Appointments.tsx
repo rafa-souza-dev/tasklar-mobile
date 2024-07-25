@@ -1,64 +1,60 @@
-import React, { useState, useEffect } from 'react'
+/* eslint-disable jsx-a11y/alt-text */
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-
-// Dados mockados
-const mockAppointments = [
-  {
-    id: 1,
-    name: 'Ike. H',
-    date: '06/06/23',
-    time: '13h',
-    service: 'Encanador',
-    status: 'Aceito',
-    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
-  },
-  {
-    id: 2,
-    name: 'Ike. H',
-    date: '24/06/23',
-    time: '17h',
-    service: 'Eletricista',
-    status: 'Pendente',
-    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
-  },
-  {
-    id: 3,
-    name: 'Ike. H',
-    date: '24/06/23',
-    time: '17h',
-    service: 'Eletricista',
-    status: 'Recusado',
-    image: 'https://via.placeholder.com/50', // substitua pela URL real da imagem
-  },
-]
+import { useWhoami } from '../modules/users/stores'
+import { useServicesByConsumer } from '../modules/services/stores'
+import { Loading } from '../components/Loading'
+import { format } from 'date-fns'
 
 export default function Appointments() {
-  const navigation = useNavigation()
-  const [appointments, setAppointments] = useState(mockAppointments)
+  const { data: user } = useWhoami()
+  const { data: services, isFetching } = useServicesByConsumer(
+    user?.consumer ?? 0,
+  )
+  const appointments = services?.map((service) => ({
+    id: service.id,
+    name: service.tasker.user.name,
+    date: format(service.date, 'dd/MM/yyyy'),
+    time: `${service.time.slice(0, 5)} horas`,
+    service: service.job.category.name,
+    status: service.status,
+    statusLabel: getStatusLabel(service.status),
+    image: 'https://via.placeholder.com/50',
+  }))
 
-  useEffect(() => {
-    // Simulando a chamada de API com dados mockados
-    setAppointments(mockAppointments)
-  }, [])
-
-  const getStatusStyle = (status: string) => {
+  function getStatusStyle(status: string) {
     switch (status) {
-      case 'Aceito':
+      case 'accepted':
         return styles.accepted
-      case 'Pendente':
+      case 'pending':
         return styles.pending
-      case 'Recusado':
+      case 'rejected':
         return styles.rejected
       default:
-        return {}
+        return styles.accepted
     }
+  }
+
+  function getStatusLabel(status: string) {
+    switch (status) {
+      case 'accepted':
+        return 'Aceito'
+      case 'pending':
+        return 'Pendente'
+      case 'rejected':
+        return 'Rejeitado'
+      default:
+        return 'Aceito'
+    }
+  }
+
+  if (isFetching) {
+    return <Loading />
   }
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Meus Agendamentos</Text>
-      {appointments.map((appointment) => (
+      {appointments?.map((appointment) => (
         <View key={appointment.id} style={styles.card}>
           <Image source={{ uri: appointment.image }} style={styles.image} />
           <View style={styles.details}>
@@ -68,7 +64,7 @@ export default function Appointments() {
             </Text>
             <Text style={styles.service}>Serviço - {appointment.service}</Text>
             <View style={[styles.status, getStatusStyle(appointment.status)]}>
-              <Text style={styles.statusText}>{appointment.status}</Text>
+              <Text style={styles.statusText}>{appointment.statusLabel}</Text>
             </View>
           </View>
         </View>
@@ -81,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 16,
+    padding: 24,
   },
   title: {
     fontSize: 24,
@@ -136,14 +132,15 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 14,
     color: '#FFFFFF',
+    fontWeight: '700',
   },
   accepted: {
-    backgroundColor: '#0057FF',
+    backgroundColor: 'rgb(76, 121, 211)',
   },
   pending: {
-    backgroundColor: '#FFD700',
+    backgroundColor: 'rgb(153, 142, 77)',
   },
   rejected: {
-    backgroundColor: '#FF0000',
+    backgroundColor: 'rgb(219, 71, 71)',
   },
 })
