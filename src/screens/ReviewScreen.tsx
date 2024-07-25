@@ -4,10 +4,10 @@ import { Image, StyleSheet, View, Text } from 'react-native'
 import { ReviewTasker } from './ReviewTasker'
 
 const taskers = [
-  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55' },
-  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55' },
-  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55' },
-  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55' },
+  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55', id: 1 },
+  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55', id: 2 },
+  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55', id: 3 },
+  { name: 'Ike. H', date: '06/06/23', image: 'https://via.placeholder.com/55', id: 4 },
 ]
 
 export function ReviewScreen() {
@@ -18,15 +18,6 @@ export function ReviewScreen() {
         {taskers.map((tasker, index) => (
           <ReviewTasker key={index} tasker={tasker} />
         ))}
-      </View>
-      <View style={styles.footer}>
-        <Image style={styles.icon} source={require('../../assets/Home.png')} />
-        <Image style={styles.icon} source={require('../../assets/Star.png')} />
-        <Image style={styles.icon} source={require('../../assets/Plus.png')} />
-        <Image
-          style={styles.icon}
-          source={require('../../assets/ListMenu.png')}
-        />
       </View>
     </View>
   )

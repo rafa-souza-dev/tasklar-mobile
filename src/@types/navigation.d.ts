@@ -12,13 +12,15 @@ export type RootStackParamList = {
   JobList: undefined
   ServiceProviderSchedule: undefined
   ProposalsRequested: undefined
-
+  Review: undefined
   JobContract: { id: number }
+  TaskerEvaluation : { id: number }
 }
 
 export type RootTabsParamList = {
   Profile: undefined
   ProfileStack: undefined
   Home: undefined
+  ReviewStack: undefined
   CreateJob: undefined
 }

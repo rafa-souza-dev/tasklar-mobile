@@ -19,6 +19,8 @@ import { JobContract } from './screens/JobContract'
 import { useWhoami } from './modules/users/stores'
 import { Loading } from './components/Loading'
 import { ProposalsRequested } from './screens/ProposalsRequested'
+import { ReviewScreen } from './screens/ReviewScreen'
+import { TaskerEvaluationScreen } from './screens/TaskerEvaluation'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabsParamList>()
@@ -79,6 +81,21 @@ function BottomTabs() {
           ),
         }}
       />
+      {user?.profile_type === 'C' && (
+        <Tab.Screen
+          name="ReviewStack"
+          component={ReviewStack}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/star.png')}
+                style={{ tintColor: tintColor(focused) }}
+              />
+            ),
+         }}
+        />
+      )}
       {user?.profile_type === 'T' && (
         <Tab.Screen
           name="CreateJob"
@@ -167,6 +184,25 @@ function ProfileStack() {
         name="ProposalsRequested"
         component={ProposalsRequested}
         options={{ title: 'Solicitações' }}
+      />
+    </Stack.Navigator>
+  )
+}
+
+function ReviewStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Review"
+        component={ReviewScreen}
+        options={{
+          title: 'Avaliações',
+        }}
+      />
+      <Stack.Screen
+        name="TaskerEvaluation"
+        component={TaskerEvaluationScreen}
+        options={{ title: 'Avaliação' }}
       />
     </Stack.Navigator>
   )

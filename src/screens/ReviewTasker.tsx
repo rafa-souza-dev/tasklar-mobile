@@ -1,11 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { NavigationProp, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { RootStackParamList } from '../@types/navigation'
 
 interface Tasker {
   name: string
   date: string
   image: string
+  id: number
 }
 
 interface ReviewTaskerProps {
@@ -13,6 +16,9 @@ interface ReviewTaskerProps {
 }
 
 export function ReviewTasker({ tasker }: ReviewTaskerProps) {
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+
   return (
     <View style={styles.card}>
       <Image source={{ uri: tasker.image }} style={styles.image} />
@@ -20,9 +26,12 @@ export function ReviewTasker({ tasker }: ReviewTaskerProps) {
         <Text style={styles.name}>{tasker.name}</Text>
         <Text style={styles.date}>{tasker.date}</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Avaliar</Text>
-      </TouchableOpacity>
+      <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('TaskerEvaluation', { id: tasker.id })}
+        >
+          <Text style={styles.buttonText}>Avaliar</Text>
+        </TouchableOpacity>
     </View>
   )
 }
