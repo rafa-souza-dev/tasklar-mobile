@@ -11,8 +11,6 @@ const JOB_DETAILS = (jobId: number) => `${JOBS}${jobId}/`
 const CREATE_JOB = `${JOBS}create/`
 
 export async function getJobs(params?: GetJobsRequest) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const response = await client.get<GetJobsResponse>(JOBS, {
     params,
   })

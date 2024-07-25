@@ -24,8 +24,6 @@ export async function getServicesByJob(
   jobId: number,
   params?: GetServicesRequest,
 ) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const response = await client.get<GetServicesResponse>(
     SERVICES_BY_JOB(jobId),
     {
@@ -40,8 +38,6 @@ export async function getServicesByTasker(
   taskerId: number,
   params?: GetServicesRequest,
 ) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const response = await client.get<GetServicesFullResponse>(
     SERVICES_BY_TASKER(taskerId),
     {
@@ -56,8 +52,6 @@ export async function getServicesByConsumer(
   consumerId: number,
   params?: GetServicesRequest,
 ) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const response = await client.get<GetServicesFullTaskerResponse>(
     SERVICES_BY_CONSUMER(consumerId),
     {
@@ -75,8 +69,6 @@ export async function postResolveService(params: postResolveServiceParams) {
 }
 
 export async function postService(params: PostServiceRequest) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const response = await client.post(SERVICE_CREATE, params)
 
   return response.data
