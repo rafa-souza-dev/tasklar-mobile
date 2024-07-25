@@ -1,43 +1,53 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { View, Text, StyleSheet } from 'react-native'
-import {
-  Agenda,
-  AgendaSchedule,
-  AgendaEntry,
-  DateData,
-} from 'react-native-calendars'
+import { Agenda, AgendaEntry } from 'react-native-calendars'
 import { useServicesByTasker } from '../modules/services/stores'
 import { useWhoami } from '../modules/users/stores'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { addMonths, format } from 'date-fns'
 
 export default function ServiceProviderSchedule() {
   const { data: user } = useWhoami()
-  const { data: services } = useServicesByTasker(user?.tasker ?? 0, {
-    status: 'accepted',
-  })
   const currentDate = format(new Date(), 'yyyy-MM-dd')
-  const [selectedDate, setSelectedDate] = useState(currentDate)
+  const currentFormattedDate = format(new Date(), 'yyyy-MM-dd')
+  const [selectedDate, setSelectedDate] = useState(currentFormattedDate)
+  const { data: services, refetch } = useServicesByTasker(user?.tasker ?? 0, {
+    status: 'accepted',
+    date: selectedDate,
+  })
 
   console.log(services)
 
-  const items: AgendaSchedule = {
-    [currentDate]: [
-      { name: 'Entrevista com candidato A', height: 50, day: currentDate },
-    ],
-    '2024-07-19': [
-      { name: 'Reunião de equipe', height: 80, day: '2024-07-19' },
-    ],
-    '2024-07-20': [],
-    '2024-07-21': [
-      { name: 'Entrega de relatório', height: 50, day: '2024-07-21' },
-      { name: 'Análise de dados', height: 50, day: '2024-07-21' },
-    ],
-  }
+  useEffect(() => {
+    refetch()
+  }, [selectedDate])
 
-  const renderItem = (
-    item: AgendaEntry,
-    firstItemInDay: boolean,
-  ): JSX.Element => {
+  const itemsServices = services?.reduce(
+    (acc, element) => {
+      const date = element.date
+      if (!acc[date]) {
+        acc[date] = []
+      }
+      acc[date].push({
+        name: `${element.consumer.user.name} - ${element.consumer.user.phone}\n${element.city} - ${element.neighborhood}`,
+        height: 50,
+        day: date,
+      })
+      return acc
+    },
+    {} as Record<
+      string,
+      {
+        name: string
+        height: number
+        day: string
+      }[]
+    >,
+  )
+
+  console.log(itemsServices)
+
+  const renderItem = (item: AgendaEntry): JSX.Element => {
     return (
       <View style={[styles.item, { height: item.height }]}>
         <Text>{item.name}</Text>
@@ -55,7 +65,7 @@ export default function ServiceProviderSchedule() {
 
   return (
     <Agenda
-      items={items}
+      items={itemsServices ?? {}}
       loadItemsForMonth={(month: {
         dateString: string
         day: number
@@ -63,10 +73,7 @@ export default function ServiceProviderSchedule() {
         timestamp: number
         year: number
       }) => {
-        console.log('trigger items loading', month)
-      }}
-      onDayPress={(day: DateData) => {
-        console.log('day pressed', day)
+        setSelectedDate(month.dateString)
       }}
       selected={selectedDate}
       minDate={currentDate}
@@ -94,7 +101,6 @@ export default function ServiceProviderSchedule() {
         agendaTodayColor: 'red',
         agendaKnobColor: 'blue',
       }}
-      style={{}}
     />
   )
 }
