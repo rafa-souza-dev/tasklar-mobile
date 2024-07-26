@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { useAuth } from '../contexts/AuthContext'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../@types/navigation'
+import { Loading } from '../components/Loading'
 
 const emailSchema = z.string().email({ message: 'Email inválido' })
 const passwordSchema = z
@@ -36,6 +37,7 @@ export function Login() {
   const [passwordError, setPasswordError] = useState('')
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   const { onLogin } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
     const emailValidation = emailSchema.safeParse(email)
@@ -56,12 +58,20 @@ export function Login() {
     }
 
     if (!hasEmailError && !hasPasswordError) {
+      setIsLoading(true)
+
       const response = await onLogin(email, password)
+
+      setIsLoading(false)
 
       if (response.error) {
         Alert.alert('Erro ao se autenticar', 'E-mail e/ou senha inválidos.')
       }
     }
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (

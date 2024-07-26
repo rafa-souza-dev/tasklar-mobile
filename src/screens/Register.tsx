@@ -17,6 +17,7 @@ import { cities, states } from '../modules/jobs/mock'
 import { StateAbbreviation } from '../modules/jobs/types'
 import MaskInput from 'react-native-mask-input'
 import { useAuth } from '../contexts/AuthContext'
+import { Loading } from '../components/Loading'
 
 const emailSchema = z.string().email({ message: 'Email inválido' })
 const passwordSchema = z
@@ -61,6 +62,7 @@ export function Register() {
   const [cityError, setCityError] = useState('')
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   const { onRegister } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleRegister = async () => {
     const emailValidation = emailSchema.safeParse(email)
@@ -131,10 +133,18 @@ export function Register() {
         profile_type: isJob ? 'T' : 'C',
       }
 
+      setIsLoading(true)
+
       await onRegister(body)
+
+      setIsLoading(false)
 
       navigation.navigate('Login')
     }
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (
